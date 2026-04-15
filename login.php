@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="style/login.css">
 </head>
 <body>
-    
+    <form>
+        <fieldset>
+            <input type="text" id="email" name="email">
+            <input type="password" id="password" name="password">
+        </fieldset>
+    </form>
 </body>
 </html>

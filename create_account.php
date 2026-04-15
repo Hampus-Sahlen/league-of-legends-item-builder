@@ -10,10 +10,10 @@
     <form>
         <fieldset>
             <legend></legend>
-            username <input type="text">
-            email <input type="text">
-            password <input type="text">
-            repeat password <input type="text">
+            username <input type="text" id="username" name="username">
+            email <input type="text" id="email" name="email">
+            password <input type="text" id="password" name="password">
+            repeat password <input type="text" id="password_repeat" name="password_repeat">
         </fieldset>
     </form>
 </body>
