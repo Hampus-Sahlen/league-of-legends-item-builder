@@ -7,10 +7,14 @@
     <link rel="stylesheet" href="style/login.css">
 </head>
 <body>
+    <header>
+        error-ruta här
+    </header>
     <form>
         <fieldset>
-            <input type="text" id="email" name="email">
-            <input type="password" id="password" name="password">
+            <legend></legend>
+            email <input type="text" id="email" name="email">
+            password <input type="password" id="password" name="password">
         </fieldset>
     </form>
 </body>
