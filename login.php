@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="style/login.css">
 </head>
 <body>
+    <header>
+        error-ruta här
+    </header>
     <form>
         <fieldset>
             <input type="text" id="email" name="email">
