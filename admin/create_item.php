@@ -1,5 +1,5 @@
 <?php
-require_once "init.php";
+require_once "../helpers/init.php";
 
 // 1. Definiera dina kolumner (exkludera din auto_increment kolumn)
 // Genom att lista dem här kan vi loopa ut både formulär och SQL-hantering
@@ -30,7 +30,7 @@ $columns = [
     "mana" => "mana",
     "mana-regen" => "mana regen",
     "movement-speed" => "movement speed",
-    "move-speed-percent" => "move speed percent",
+    "movement-speed-percent" => "movement speed percent",
     "armor-pen-percent" => "armor pen percent",
     "magic-pen-percent" => "magic pen percent",
     // ... fyll på med resterande kolumner upp till 29 stycken
@@ -45,12 +45,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $values = [];
 
     foreach ($columns as $dbCol => $label) {
-        if (isset($_POST[$dbCol])) {
-            $insertColumns[] = $dbCol;
-            $placeholders[] = "?";
-            $values[] = $_POST[$dbCol];
-        }
+    if (isset($_POST[$dbCol])) {
+        $insertColumns[] = $dbCol;
+        $placeholders[] = "?";
+        
+        // Trimma bort eventuella mellanslag och kolla om fältet är tomt
+        $val = trim($_POST[$dbCol]);
+        
+        // Om fältet är tomt, skicka null - annars skicka värdet
+        $values[] = ($val === "") ? null : $val;
     }
+}
 
     if (!empty($insertColumns)) {
         $sql = "INSERT INTO items (`" . implode("`, `", $insertColumns) . "`) 
