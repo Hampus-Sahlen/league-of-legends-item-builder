@@ -45,12 +45,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $values = [];
 
     foreach ($columns as $dbCol => $label) {
-        if (isset($_POST[$dbCol])) {
-            $insertColumns[] = $dbCol;
-            $placeholders[] = "?";
-            $values[] = $_POST[$dbCol];
-        }
+    if (isset($_POST[$dbCol])) {
+        $insertColumns[] = $dbCol;
+        $placeholders[] = "?";
+        
+        // Trimma bort eventuella mellanslag och kolla om fältet är tomt
+        $val = trim($_POST[$dbCol]);
+        
+        // Om fältet är tomt, skicka null - annars skicka värdet
+        $values[] = ($val === "") ? null : $val;
     }
+}
 
     if (!empty($insertColumns)) {
         $sql = "INSERT INTO items (`" . implode("`, `", $insertColumns) . "`) 
