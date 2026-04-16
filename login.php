@@ -1,10 +1,23 @@
 <?php
 require_once "helpers/init.php";
-if (isset($_SESSION["UUID"]) && isset($_SESSION["accessLevel"])) {
+$errorMessage = "";
+$successMessage = "";
+
+if (isset($_GET["logout"])) { if ($_GET["logout"] == "true") { // logout
+    unset($_SESSION["UUID"]);
+    unset($_SESSION["accessLevel"]);
+    $_SESSION["logout"] = true;
+    redirect("login.php");
+}}
+
+if (isset($_SESSION["logout"])) { if ($_SESSION["logout"]) { // if user has been logged out, display successful logout message
+    $successMessage = "Logged out successfully";
+}}
+
+if (isset($_SESSION["UUID"]) && isset($_SESSION["accessLevel"])) { // if logged in, redirect to main page
     redirect("mainpage.php");
 }
 
-$errorMessage = "";
 if (isset($_POST["email"])) { // try to login the user
     $email = $_POST["email"];
     $password = $_POST["password"];
@@ -29,11 +42,11 @@ if (isset($_POST["email"])) { // try to login the user
             redirect("test.php");
         }
         else {
-            $errorMessage = "email or password incorrect";
+            $errorMessage = "Email or password incorrect";
         }
     }
     elseif (count($user) === 0) {
-        $errorMessage = "email or password incorrect";
+        $errorMessage = "Email or password incorrect";
     } 
     elseif (count($user) > 1) {
         $errorMessage = "An unexpected error has occured! E0001";
@@ -57,10 +70,10 @@ if (isset($_POST["email"])) { // try to login the user
 <body>
     <header>
         <div>
-            error-ruta här
+            <?php $errorMessage ?>
         </div>
         <div>
-            successful login-ruta här
+            <?php $successMessage ?>
         </div>
     </header>
     <form>
