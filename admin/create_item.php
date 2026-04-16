@@ -1,5 +1,5 @@
 <?php
-require_once "init.php";
+require_once "../helpers/init.php";
 
 // 1. Definiera dina kolumner (exkludera din auto_increment kolumn)
 // Genom att lista dem här kan vi loopa ut både formulär och SQL-hantering
