@@ -53,8 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     if (!empty($insertColumns)) {
-        $sql = "INSERT INTO items (" . implode(", ", $insertColumns) . ") 
-                VALUES (" . implode(", ", $placeholders) . ")";
+        $sql = "INSERT INTO items (`" . implode("`, `", $insertColumns) . "`) 
+        VALUES (" . implode(", ", $placeholders) . ")";
         
         try {
             // Använder din metod från database.php
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 ?>
 
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Skapa nytt objekt</title>
