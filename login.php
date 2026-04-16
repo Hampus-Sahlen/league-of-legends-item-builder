@@ -56,7 +56,12 @@ if (isset($_POST["email"])) { // try to login the user
 </head>
 <body>
     <header>
-        error-ruta här
+        <div>
+            error-ruta här
+        </div>
+        <div>
+            successful login-ruta här
+        </div>
     </header>
     <form>
         <fieldset>
