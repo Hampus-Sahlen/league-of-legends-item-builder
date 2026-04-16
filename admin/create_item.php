@@ -30,7 +30,7 @@ $columns = [
     "mana" => "mana",
     "mana-regen" => "mana regen",
     "movement-speed" => "movement speed",
-    "move-speed-percent" => "move speed percent",
+    "movement-speed-percent" => "movement speed percent",
     "armor-pen-percent" => "armor pen percent",
     "magic-pen-percent" => "magic pen percent",
     // ... fyll på med resterande kolumner upp till 29 stycken
