@@ -1,3 +1,19 @@
+<?php
+require_once "helpers/init.php";
+if (isset($_SESSION["UUID"]) && isset($_SESSION["accessLevel"])) {
+    redirect("mainpage.php");
+}
+
+$errorMessage = "";
+if (isset($_POST["username"])) { // try to create the user
+    $username = $_POST["username"];
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+    $passwordRepeat = $_POST["password_repeat"];
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
