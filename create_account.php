@@ -6,17 +6,42 @@ if (isset($_SESSION["UUID"]) && isset($_SESSION["accessLevel"])) {
 
 $errorMessage = [];
 if (isset($_POST["username"])) { // try to create the user
-    $username = $_POST["username"];
-    $email = $_POST["email"];
+    $username = trim($_POST["username"]);
+    $email = trim($_POST["email"]);
     $password = $_POST["password"];
     $passwordRepeat = $_POST["password_repeat"];
     
-    if (!preg_match("/^[\wåäöÅÄÖ]{3,30}$/", $username)){
-        $errorMessage[] = "Your username must have between 3 and 30 symbols. Allowed symbols: A to Z, ÅÄÖ and _";
+    if (!preg_match("/^[\wåäöÅÄÖ]{3,30}$/", $username)){ // check for a valid username
+        $errorMessage[] = "Your username must have between 3 and 30 symbols. Allowed symbols: A to Z, numbers, ÅÄÖ and _";
     }
-    // email regex: /^[^@\s]+@[^.\s]+\.[^\s]+\s*$/
-    // check duplicate emails before adding
+    if (!preg_match("/^[^@\s]+@[^.\s]+\.[^\s]+\s*$/", $email)){ // check for a valid email
+        $errorMessage[] = "Invalid email adress";
+    }
+    else { // query only if valid email adress
+        if (count($dbObject->query("SELECT * FROM `user` WHERE `email` = ?", [$email])) !== 0){ // check if email already exists
+            $errorMessage[] = "Email already taken";
+        }
+    }
+    if (!preg_match("/^[^\s]+$/", $password)){ // checks if password contains no spaces and at least 1 character
+        $errorMessage[] = "You must have a password that does not contain spaces";
+    }
+    if ($password !== $passwordRepeat){
+        $errorMessage[] = "Your passwords do not match";
+    }
+
+    if (count($errorMessage) === 0) { // if no problems were found
+        // create account
+        $passwordHASHED = password_hash($password, PASSWORD_BCRYPT); // 60 character HASH
+        unset($password);
+        unset($passwordCheck); // prevent accidental leaks
+
+        $dbObject->write(
+        "INSERT INTO `user` (`username`, `email`, `access-level`, `password`) VALUES (?, ?, 0, ?)",
+        [$username, $email, $passwordHASHED]);
+    }
 }
+
+debugPrint($errorMessage);
 
 ?>
 
@@ -32,14 +57,16 @@ if (isset($_POST["username"])) { // try to create the user
     <header>
         error-ruta här
     </header>
-    <form>
+    <form method="post" target="_self">
         <fieldset>
             <legend></legend>
-            username <input type="text" id="username" name="username" pattern="/^[\wåäöÅÄÖ]{3,30}$/" required>
+            username <input type="text" id="username" name="username" required>
             email <input type="text" id="email" name="email" required>
             password <input type="text" id="password" name="password" required>
             repeat password <input type="text" id="password_repeat" name="password_repeat" required>
+            <input type="submit">
         </fieldset>
     </form>
+    <a href="login.php">login</a>
 </body>
 </html>

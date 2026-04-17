@@ -10,18 +10,23 @@ if (isset($_GET["logout"])) { if ($_GET["logout"] == "true") { // logout
     redirect("login.php");
 }}
 
-if (isset($_SESSION["logout"])) { if ($_SESSION["logout"]) { // if user has been logged out, display successful logout message
+if (isset($_SESSION["logout"])) { if ($_SESSION["logout"]) { // if user has been logged out
     $successMessage = "Logged out successfully";
+    unset($_SESSION["logout"]);
 }}
 
 if (isset($_SESSION["UUID"]) && isset($_SESSION["accessLevel"])) { // if logged in, redirect to main page
     redirect("mainpage.php");
 }
 
+if (isset($_SESSION["createdAccount"])) { if ($_SESSION["createdAccount"]) { // if user has created an account
+    $successMessage = "Account created successfully";
+    unset($_SESSION["createdAccount"]);
+}}
+
 if (isset($_POST["email"])) { // try to login the user
     $email = $_POST["email"];
     $password = $_POST["password"];
-    
     $user = $dbObject->query(
         "SELECT 
             `UUID`,
@@ -34,6 +39,7 @@ if (isset($_POST["email"])) { // try to login the user
     );
 
     if (count($user) === 1) {
+        $user = $user[0];
         // login the user
         if (password_verify($password, $user["password"])) {
             // user is verified and logged in
@@ -76,12 +82,14 @@ if (isset($_POST["email"])) { // try to login the user
             <?php $successMessage ?>
         </div>
     </header>
-    <form>
+    <form method="post" target="_self">
         <fieldset>
             <legend></legend>
-            email <input type="text" id="email" name="email">
-            password <input type="password" id="password" name="password">
+            email <input type="text" id="email" name="email" required>
+            password <input type="password" id="password" name="password" required>
+            <input type="submit">
         </fieldset>
     </form>
+    <a href="create_account.php">create account</a>
 </body>
 </html>
