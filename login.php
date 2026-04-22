@@ -55,10 +55,10 @@ if (isset($_POST["email"])) { // try to login the user
         $errorMessage = "Email or password incorrect";
     } 
     elseif (count($user) > 1) {
-        $errorMessage = "An unexpected error has occured! E0001";
+        $errorMessage = "An unexpected error has occured! P00E01";
     }
     else {
-        $errorMessage = "An unexpected error has occured! E0002";
+        $errorMessage = "An unexpected error has occured! P00E02";
     }
 
 }
@@ -76,10 +76,10 @@ if (isset($_POST["email"])) { // try to login the user
 <body>
     <header>
         <div>
-            <?php $errorMessage ?>
+            <?php echo $errorMessage ?>
         </div>
         <div>
-            <?php $successMessage ?>
+            <?php echo $successMessage ?>
         </div>
     </header>
     <form method="post" target="_self">

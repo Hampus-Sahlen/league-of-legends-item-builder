@@ -35,13 +35,18 @@ if (isset($_POST["username"])) { // try to create the user
         unset($password);
         unset($passwordCheck); // prevent accidental leaks
 
-        $dbObject->write(
+        $reply = $dbObject->write(
         "INSERT INTO `user` (`username`, `email`, `access-level`, `password`) VALUES (?, ?, 0, ?)",
         [$username, $email, $passwordHASHED]);
+        if ($reply){
+            $_SESSION["createdAccount"] = true;
+            redirect("login.php");
+        } else {
+            $errorMessage[] = "An error occured while creating your account! E01P01";
+        }
     }
 }
 
-debugPrint($errorMessage);
 
 ?>
 
@@ -55,7 +60,9 @@ debugPrint($errorMessage);
 </head>
 <body>
     <header>
-        error-ruta här
+        <?php foreach ($errorMessage as $error): ?>
+        <p><?php echo $error ?></p>
+        <?php endforeach ?>
     </header>
     <form method="post" target="_self">
         <fieldset>
