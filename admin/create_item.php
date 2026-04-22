@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
 
-    <h1>Lägg till i databasen</h1>
+    <h1>Add new item to database (like a boss)</h1>
 
     <?php if ($message): ?>
         <div class="message"><?php echo es($message); ?></div>
