@@ -1,5 +1,5 @@
 <?php
-$host = "";
-$user = "";
-$password = "";
-$database = "";
+$host = "localhost"; 
+$user = "root";      
+$password = "";      
+$database = "league_of_legends";

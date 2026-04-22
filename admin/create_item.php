@@ -1,8 +1,7 @@
 <?php
 require_once "../helpers/init.php";
 
-// 1. Definiera dina kolumner (exkludera din auto_increment kolumn)
-// Genom att lista dem här kan vi loopa ut både formulär och SQL-hantering
+// 1. Definiera dina kolumner
 $columns = [
     "name" => "name",
     "cost"  => "cost",
@@ -33,36 +32,37 @@ $columns = [
     "movement-speed-percent" => "movement speed percent",
     "armor-pen-percent" => "armor pen percent",
     "magic-pen-percent" => "magic pen percent",
-    // ... fyll på med resterande kolumner upp till 29 stycken
 ];
 
 $message = "";
 
-// 2. Hantera POST-förfrågan
+// 2. Kontrollera om formuläret har skickats via POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $insertColumns = [];
     $placeholders = [];
     $values = [];
 
     foreach ($columns as $dbCol => $label) {
-    if (isset($_POST[$dbCol])) {
-        $insertColumns[] = $dbCol;
-        $placeholders[] = "?";
-        
-        // Trimma bort eventuella mellanslag och kolla om fältet är tomt
-        $val = trim($_POST[$dbCol]);
-        
-        // Om fältet är tomt, skicka null - annars skicka värdet
-        $values[] = ($val === "") ? null : $val;
+        if (isset($_POST[$dbCol])) {
+            $insertColumns[] = $dbCol;
+            $placeholders[] = "?"; // Skapar ett frågetecken för varje kolumn
+            
+            // Trimma bort eventuella mellanslag och kolla om fältet är tomt
+            $val = trim($_POST[$dbCol]);
+            
+            // Om fältet är tomt, skicka null - annars skicka värdet
+            $values[] = ($val === "") ? null : $val;
+        }
     }
-}
 
+    // 3. Bygg och kör SQL-frågan
     if (!empty($insertColumns)) {
-        $sql = "INSERT INTO items (`" . implode("`, `", $insertColumns) . "`) 
-        VALUES (" . implode(", ", $placeholders) . ")";
+        // Observera backticks runt kolumnnamnen och tabellnamnet "item"
+        $sql = "INSERT INTO item (`" . implode("`, `", $insertColumns) . "`) 
+                VALUES (" . implode(", ", $placeholders) . ")";
         
         try {
-            // Använder din metod från database.php
+            // Använder din metod från database.php för att spara och hämta det nya ID:t
             $newId = $dbObject->insertAndGetID($sql, $values);
             $message = "Lyckades! Skapade rad med ID: " . $newId;
         } catch (Exception $e) {
@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Skapa nytt objekt</title>
+    <title>Create Item</title>
     <style>
         .form-group { margin-bottom: 15px; display: flex; flex-direction: column; width: 300px; }
         .message { padding: 10px; background: #e0f0e0; margin-bottom: 20px; border-radius: 4px; }
