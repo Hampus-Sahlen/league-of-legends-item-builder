@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         try {
             // Använder din metod från database.php för att spara och hämta det nya ID:t
             $newId = $dbObject->insertAndGetID($sql, $values);
-            $message = "Lyckades! Skapade rad med ID: " . $newId;
+            $message = "Saved with ID: " . $newId;
         } catch (Exception $e) {
             $message = "Fel: " . $e->getMessage();
         }
@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
         <?php endforeach; ?>
 
-        <button type="submit">Spara i databasen</button>
+        <button type="submit">Save to database</button>
     </form>
 
 </body>
