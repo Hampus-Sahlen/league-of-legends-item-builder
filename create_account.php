@@ -1,6 +1,7 @@
 <?php
+// Documentation: https://docs.google.com/document/d/1M4vFmgnGQlnSS8qmiZ4SVyzixE4QK-1tPX_lmDFmVyA/edit?tab=t.h6hbnaovoow8
 require_once "helpers/init.php";
-if (isset($_SESSION["UUID"]) && isset($_SESSION["accessLevel"])) {
+if (isset($_SESSION["UUID"]) && isset($_SESSION["accessLevel"]) && isset($_SESSION["username"])) { // if logged in, redirect to main page
     redirect("mainpage.php");
 }
 
@@ -42,7 +43,7 @@ if (isset($_POST["username"])) { // try to create the user
             $_SESSION["createdAccount"] = true;
             redirect("login.php");
         } else {
-            $errorMessage[] = "An error occured while creating your account! E01P01";
+            $errorMessage[] = "An unexpected error occured while creating your account! P01E01";
         }
     }
 }

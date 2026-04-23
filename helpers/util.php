@@ -1,4 +1,5 @@
 <?php
+// documentation: https://docs.google.com/document/d/1M4vFmgnGQlnSS8qmiZ4SVyzixE4QK-1tPX_lmDFmVyA/edit?tab=t.s4ncqfvorcxr
 function debugPrint ($var) {
     echo "<pre>";
     var_dump($var);
@@ -10,13 +11,13 @@ function redirect(string $page) {
     exit;
 }
 
-function requireLogin(string $rootPath="./") {
-    $rootPath = rtrim($rootPath, "/") . "/";
-    if ($rootPath === "/") {
-        $rootPath = "./";
+function requireLogin(string $loginPage="./") {
+    $loginPage = rtrim($loginPage, "/") . "/";
+    if ($loginPage === "/") {
+        $loginPage = "./";
     }
     if (!isset($_SESSION["UUID"])) {
-        redirect($rootPath . "");
+        redirect($loginPage . "");
     }
 }
 

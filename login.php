@@ -1,4 +1,5 @@
 <?php
+// Documentation: https://docs.google.com/document/d/1M4vFmgnGQlnSS8qmiZ4SVyzixE4QK-1tPX_lmDFmVyA/edit?tab=t.0
 require_once "helpers/init.php";
 $errorMessage = "";
 $successMessage = "";
@@ -6,22 +7,23 @@ $successMessage = "";
 if (isset($_GET["logout"])) { if ($_GET["logout"] == "true") { // logout
     unset($_SESSION["UUID"]);
     unset($_SESSION["accessLevel"]);
+    unset($_SESSION["username"]);
     $_SESSION["logout"] = true;
     redirect("login.php");
 }}
 
 if (isset($_SESSION["logout"])) { if ($_SESSION["logout"]) { // if user has been logged out
-    $successMessage = "Logged out successfully";
     unset($_SESSION["logout"]);
+    $successMessage = "Logged out successfully";
 }}
 
-if (isset($_SESSION["UUID"]) && isset($_SESSION["accessLevel"])) { // if logged in, redirect to main page
+if (isset($_SESSION["UUID"]) && isset($_SESSION["accessLevel"]) && isset($_SESSION["username"])) { // if logged in, redirect to main page
     redirect("mainpage.php");
 }
 
 if (isset($_SESSION["createdAccount"])) { if ($_SESSION["createdAccount"]) { // if user has created an account
-    $successMessage = "Account created successfully";
     unset($_SESSION["createdAccount"]);
+    $successMessage = "Account created successfully";
 }}
 
 if (isset($_POST["email"])) { // try to login the user
@@ -30,6 +32,7 @@ if (isset($_POST["email"])) { // try to login the user
     $user = $dbObject->query(
         "SELECT 
             `UUID`,
+            `username`,
             `email`,
             `password`,
             `access-level`
@@ -45,7 +48,8 @@ if (isset($_POST["email"])) { // try to login the user
             // user is verified and logged in
             $_SESSION["UUID"] = $user["UUID"];
             $_SESSION["accessLevel"] = $user["access-level"];
-            redirect("test.php");
+            $_SESSION["username"] = $user["username"];
+            redirect("mainpage.php");
         }
         else {
             $errorMessage = "Email or password incorrect";
@@ -54,11 +58,8 @@ if (isset($_POST["email"])) { // try to login the user
     elseif (count($user) === 0) {
         $errorMessage = "Email or password incorrect";
     } 
-    elseif (count($user) > 1) {
-        $errorMessage = "An unexpected error has occured! P00E01";
-    }
     else {
-        $errorMessage = "An unexpected error has occured! P00E02";
+        $errorMessage = "An unexpected error has occured! P00E01";
     }
 
 }
