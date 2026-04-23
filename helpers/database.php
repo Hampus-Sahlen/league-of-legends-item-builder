@@ -1,4 +1,5 @@
 <?php
+// documentation https://docs.google.com/document/d/1M4vFmgnGQlnSS8qmiZ4SVyzixE4QK-1tPX_lmDFmVyA/edit?tab=t.o4cuwxi3dm7h
     class DatabaseConnection {
 
         private $conn;

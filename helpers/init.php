@@ -1,4 +1,5 @@
 <?php 
+// documentation https://docs.google.com/document/d/1M4vFmgnGQlnSS8qmiZ4SVyzixE4QK-1tPX_lmDFmVyA/edit?tab=t.8a31a1795mcx
 if (PHP_VERSION_ID < 80100) { // php 8.1+ is required for page to run properly
     exit("PHP 8.1+ required.");
 }
