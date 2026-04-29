@@ -27,11 +27,13 @@ $items = $dbObject -> query_nofetch(
             unset($item["ID"]);
             foreach ($item as $key => $val) { 
                 if ($val !== null) {
+                    echo "<div>";
                     echo "<h1>";
                     echo $key;
                     echo "</h1><p>";
                     echo $val;
                     echo "</p>";
+                    echo "</div>";
                 }
             }
             echo "</div>";
@@ -44,12 +46,6 @@ $items = $dbObject -> query_nofetch(
     </header>
     <main>
         <div id="itemStorage">
-            <article>
-                <img src="images/Blade_of_the_Ruined_King_item_HD.webp" alt="Blade of the Ruined King">
-            </article>
-            <article>
-                <img src="images/Infinity_Edge_item_HD.webp" alt="Infinity Edge">
-            </article>
         </div>
         <div id="itemInventory">
             <article>
