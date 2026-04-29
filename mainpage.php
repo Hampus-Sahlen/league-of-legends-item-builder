@@ -43,7 +43,7 @@ $items = $dbObject -> query_nofetch(
         <a href="login.php?logout=true">Log out</a>
     </header>
     <main>
-        <div>
+        <div id="itemStorage">
             <article>
                 <img src="images/Blade_of_the_Ruined_King_item_HD.webp" alt="Blade of the Ruined King">
             </article>
@@ -51,12 +51,12 @@ $items = $dbObject -> query_nofetch(
                 <img src="images/Infinity_Edge_item_HD.webp" alt="Infinity Edge">
             </article>
         </div>
-        <div>
+        <div id="itemInventory">
             <article>
                 <img src="images/Void_Staff_item_HD.webp" alt="Void Staff">
             </article>
         </div>
-        <div>
+        <div id="itemStats">
             <p>Ability Power: 95</p>
             <p>Magic penetration: 40%</p>
         </div>
