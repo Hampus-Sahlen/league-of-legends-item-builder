@@ -24,7 +24,6 @@ $items = $dbObject -> query_nofetch(
     <div id="importDiv">
         <?php while ($item = $items -> fetch_assoc()): 
             echo "<div>";
-            unset($item["ID"]);
             foreach ($item as $key => $val) { 
                 if ($val !== null) {
                     echo "<div>";
@@ -47,10 +46,8 @@ $items = $dbObject -> query_nofetch(
     <main>
         <div id="itemStorage">
         </div>
+        <br>
         <div id="itemInventory">
-            <article>
-                <img src="images/Void_Staff_item_HD.webp" alt="Void Staff">
-            </article>
         </div>
         <div id="itemStats">
             <p>Ability Power: 95</p>
