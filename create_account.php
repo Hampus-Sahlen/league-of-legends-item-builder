@@ -56,7 +56,7 @@ if (isset($_POST["username"])) { // try to create the user
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Create Account</title>
     <link rel="stylesheet" href="style/auth.css">
 </head>
 <body>
@@ -98,6 +98,7 @@ if (isset($_POST["username"])) { // try to create the user
             </fieldset>
 
             <p>Already have an account? <a href="login.php">Log in here</a>.</p>
+            <p><a href="mainpage.php">Back to main page</a></p>
         </form>
     </main>
 

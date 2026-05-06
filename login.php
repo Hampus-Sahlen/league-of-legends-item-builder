@@ -71,7 +71,7 @@ if (isset($_POST["email"])) { // try to login the user
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Log In</title>
     <link rel="stylesheet" href="style/auth.css">
 </head>
 <body>
@@ -103,6 +103,7 @@ if (isset($_POST["email"])) { // try to login the user
             </fieldset>
 
             <p>Don't have an account? <a href="create_account.php">Create one here</a>.</p>
+            <p><a href="mainpage.php">Back to main page</a></p>
         </form>
     </main>
 </body>
