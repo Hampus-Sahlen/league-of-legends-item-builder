@@ -68,6 +68,7 @@ function importItems() {
         image.alt = item["name"]
         // add article container with index value in dataset to find item stats later
         let article = document.createElement("article")
+        article.classList.add("item")
         article.dataset["index"] = index
         article.title = item["name"] // hover over shows the name of the item
         article.appendChild(image) 
@@ -94,6 +95,7 @@ function startDraggingObject(e) { // start dragging an object
     this.style.position = "fixed"
     // make object a dragObject
     this.classList.add("js-dragObject")
+    this.style.cursor = "grabbing"
     // add button release checker to object
     dragObjects = document.querySelectorAll(".js-dragObject")
 }
@@ -110,6 +112,7 @@ function stopDraggingObjects(e) {
     dragObjects.forEach(element => {
         // remove dragging properties
         element.classList.remove("js-dragObject")
+        element.style.cursor = ""
         element.style.position = ""
         // assign item to a new container if dropped on one 
         document.querySelectorAll(".js-itemContainer").forEach(container => {
