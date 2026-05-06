@@ -22,7 +22,7 @@ $items = $dbObject -> query_nofetch(
 </head>
 <body>
     <div id="importDiv">
-        <?php while ($item = $items -> fetch_assoc()): 
+        <?php while ($item = $items -> fetch_assoc()) {
             echo "<div>";
             foreach ($item as $key => $val) { 
                 if ($val !== null) {
@@ -36,7 +36,7 @@ $items = $dbObject -> query_nofetch(
                 }
             }
             echo "</div>";
-        endwhile ?>
+        } ?>
     </div>
 
     <header>
@@ -44,15 +44,9 @@ $items = $dbObject -> query_nofetch(
         <a href="login.php?logout=true">Log out</a>
     </header>
     <main>
-        <div id="itemStorage">
-        </div>
-        <br>
-        <div id="itemInventory">
-        </div>
-        <div id="itemStats">
-            <p>Ability Power: 95</p>
-            <p>Magic penetration: 40%</p>
-        </div>
+        <div id="itemStorage"></div>
+        <div id="itemInventory"></div>
+        <div id="itemStats"></div>
     </main>
 </body>
 </html>
