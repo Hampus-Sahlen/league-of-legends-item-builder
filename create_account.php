@@ -12,8 +12,8 @@ if (isset($_POST["username"])) { // try to create the user
     $password = $_POST["password"];
     $passwordRepeat = $_POST["password_repeat"];
     
-    if (!preg_match("/^[\wåäöÅÄÖ]{3,30}$/", $username)){ // check for a valid username
-        $errorMessage[] = "Your username must have between 3 and 30 symbols. Allowed symbols: A to Z, numbers, ÅÄÖ and _";
+    if (!preg_match("/^\w{3,30}$/", $username)){ // check for a valid username
+        $errorMessage[] = "Your username must have between 3 and 30 symbols. Allowed symbols: A to Z, numbers and underscore";
     }
     if (!preg_match("/^[^@\s]+@[^.\s]+\.[^\s]+\s*$/", $email)){ // check for a valid email
         $errorMessage[] = "Invalid email adress";
@@ -57,24 +57,49 @@ if (isset($_POST["username"])) { // try to create the user
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style/login.css">
+    <link rel="stylesheet" href="style/auth.css">
 </head>
 <body>
     <header>
-        <?php foreach ($errorMessage as $error): ?>
-        <p><?php echo $error ?></p>
-        <?php endforeach ?>
+        <div id="error-message" class="error">
+            <?php foreach ($errorMessage as $error): ?>
+            <p><?php echo $error ?></p>
+            <?php endforeach ?>
+        </div>
+        <!-- <div id="success-message" class="success"></div> -->
     </header>
-    <form method="post" target="_self">
-        <fieldset>
-            <legend></legend>
-            username <input type="text" id="username" name="username" required>
-            email <input type="text" id="email" name="email" required>
-            password <input type="text" id="password" name="password" required>
-            repeat password <input type="text" id="password_repeat" name="password_repeat" required>
-            <input type="submit">
-        </fieldset>
-    </form>
-    <a href="login.php">login</a>
+
+    <main>
+        <form target="_self" action="" method="POST">
+            <fieldset>
+                <legend>Create New Account</legend>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password_repeat">Repeat Password</label>
+                    <input type="password" id="password_repeat" name="password_repeat" required>
+                </div>
+
+                <button type="submit">Create Account</button>
+            </fieldset>
+
+            <p>Already have an account? <a href="login.php">Log in here</a>.</p>
+        </form>
+    </main>
+
 </body>
 </html>

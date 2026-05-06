@@ -72,25 +72,38 @@ if (isset($_POST["email"])) { // try to login the user
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style/login.css">
+    <link rel="stylesheet" href="style/auth.css">
 </head>
 <body>
     <header>
-        <div>
+        <div id="error-message" class="error">
             <?php echo $errorMessage ?>
         </div>
-        <div>
+        <div id="success-message" class="success">
             <?php echo $successMessage ?>
         </div>
     </header>
-    <form method="post" target="_self">
-        <fieldset>
-            <legend></legend>
-            email <input type="text" id="email" name="email" required>
-            password <input type="password" id="password" name="password" required>
-            <input type="submit">
-        </fieldset>
-    </form>
-    <a href="create_account.php">create account</a>
+
+    <main>
+        <form target="_self" action="" method="POST" >
+            <fieldset>
+                <legend>Account Login</legend>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <button type="submit">Log In</button>
+            </fieldset>
+
+            <p>Don't have an account? <a href="create_account.php">Create one here</a>.</p>
+        </form>
+    </main>
 </body>
 </html>
