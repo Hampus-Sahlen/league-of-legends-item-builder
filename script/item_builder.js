@@ -8,13 +8,40 @@ let dragObjects = new Array
 importDiv.remove()
 
 
+const statNameTranslation = {
+    "health": "Health",
+    "health-regen": "Health Regeneration",
+    "heal-and-shield-power": "Heal and Shield Power",
+    "armor": "Armor",
+    "magic-resistance": "Magic Resist",
+    "tenacity": "Tenacity",
+    "slow-resist": "Slow Resist",
+    "attack-speed": "Attack Speed",
+    "attack-damage": "Attack Damage",
+    "ability-power": "Ability Power",
+    "crit-chance": "Crit Chance",
+    "crit-damage": "Crit Damage",
+    "lethality": "Lethality",
+    "magic-pen": "Magic Penetration",
+    "life-steal": "Life Steal",
+    "omnivamp": "Omnivamp",
+    "gold-generation": "Gold generated over 5 seconds",
+    "ability-haste": "Ability Haste",
+    "mana": "Mana",
+    "mana-regen": "Mana Regeneration",
+    "movement-speed": "Movement Speed",
+    "movement-speed-percent": "Movement Speed",
+    "armor-pen-percent": "Armor Penetration",
+    "magic-pen-percent": "Magic Penetration"
+}
+
 
 let items = new Array
 
 for (let i = 0; i < importDiv.children.length; i++) {
     const item = importDiv.children[i];
     
-    let tempArr = new Array
+    let tempArr = new Object
 
     for (let i = 0; i < item.children.length; i++) {
         const stat = item.children[i];
@@ -84,8 +111,86 @@ function stopDraggingObjects(e) {
                 // item was dropped on the container
                 console.info("reassigning", element, "to", container)
                 container.appendChild(element);
+                updateStatView() // update the stats displayed
             }
         });
     });
     dragObjects = document.querySelectorAll(".js-dragObject")
+}
+
+function updateStatView() {
+    console.info("Updating stats")
+
+    // combine stats for displaying
+    finishedStats = new Object
+    finishedStats.abilities = new Array
+    finishedStats.groups = new Array
+
+    for (let i = 0; i < itemInventory.children.length; i++) {
+        let item = items[itemInventory.children[i].dataset["index"]];
+        item = structuredClone(item) // edit item without modifying the stored item
+        finishedStats.abilities.push(item["ability"])
+        finishedStats.groups.push(item["item-group"]) // use in the future to identify if multiple items from the same group exist
+        
+        // remove unstackable or undesired attributes
+        delete item["ability"]
+        delete item["item-group"]
+        delete item["index"]
+        delete item["image"]
+        delete item["name"]
+        delete item["ID"]
+    
+        Object.keys(item).forEach(key=>{
+            if (typeof finishedStats[key] !== 'undefined') {
+                finishedStats[key] += parseInt(item[key])
+            }
+            else {
+                finishedStats[key] = parseInt(item[key])
+            }
+        })
+    }
+
+    // display stats
+    itemStats.innerHTML = ""
+    
+    p = document.createElement("p")
+    p.innerHTML = "Total cost: "+finishedStats.cost // display total cost
+    itemStats.appendChild(p)
+
+    finishedStats.abilities.forEach(ability=>{ // display abilities of all items (if there is one)
+        if (typeof ability !== 'undefined') {
+            p = document.createElement("p")
+            p.innerHTML = "Ability: "+ability
+            itemStats.appendChild(p)
+        }
+    })
+
+    percentStats = [
+        "slow-resist",
+        "heal-and-shield-power",
+        "tenacity",
+        "attack-speed",
+        "omnivamp",
+        "life-steal",
+        "mana-regen",
+        "health-regen",
+        "crit-damage",
+        "crit-chance",
+        "movement-speed-percent", 
+        "armor-pen-percent", 
+        "magic-pen-percent"
+    ]
+
+    delete finishedStats["abilities"]
+    delete finishedStats["cost"]
+    delete finishedStats["groups"]
+    
+    Object.keys(finishedStats).sort().forEach(key=>{ // display each stat
+        p = document.createElement("p")
+        p.innerHTML = statNameTranslation[key]+": "+finishedStats[key]
+        if (percentStats.includes(key)) { // if stat is a percent stat, add percent to the end
+            p.innerHTML += "%"
+        }
+        itemStats.appendChild(p)
+    })
 }
