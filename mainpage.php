@@ -13,10 +13,8 @@ if (!empty($_SESSION["UUID"])) {
         FROM `user`
         WHERE `UUID` = ?",
         [$_SESSION["UUID"]]
-    );
+    )[0];
 }
-
-debugPrint($userInfo)
 
 ?>
 
