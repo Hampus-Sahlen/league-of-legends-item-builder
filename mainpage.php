@@ -4,8 +4,19 @@ require_once "helpers/init.php";
 $items = $dbObject -> query_nofetch(
     "SELECT * 
     FROM item
-")
+");
 
+$userInfo = null;
+if (!empty($_SESSION["UUID"])) {
+    $userInfo = $dbObject -> query(
+        "SELECT *
+        FROM `user`
+        WHERE `UUID` = ?",
+        [$_SESSION["UUID"]]
+    );
+}
+
+debugPrint($userInfo)
 
 ?>
 
@@ -35,8 +46,12 @@ $items = $dbObject -> query_nofetch(
     </div>
 
     <header class="top-nav">
-        <h1>Hampus Sahlen</h1>
+        <?php if (!empty($userInfo)): ?>
+        <h1><?php echo $userInfo["username"] ?></h1>
         <a href="login.php?logout=true" class="logout-btn">Log out</a>
+        <?php else: ?>
+        <a href="login.php" class="logout-btn">Log in</a>
+        <?php endif ?>
     </header>
 
     <main class="builder-container">
