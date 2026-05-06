@@ -109,9 +109,18 @@ function stopDraggingObjects(e) {
             // creates hitbox for itemContainer, checks if mouse is inside hitbox
             if ((e.clientX >= rect.left && e.clientX <= rect.right) && (e.clientY >= rect.top && e.clientY <= rect.bottom)) {
                 // item was dropped on the container
+                if (container === itemInventory) {
+                    if (itemInventory.children.length > 6) {
+                        console.info("reassigning", element, "to", container)
+                        container.appendChild(element);
+                        updateStatView() // update the stats displayed
+                    }
+                } 
+                else {
                 console.info("reassigning", element, "to", container)
                 container.appendChild(element);
                 updateStatView() // update the stats displayed
+                }
             }
         });
     });
@@ -193,4 +202,26 @@ function updateStatView() {
         }
         itemStats.appendChild(p)
     })
+}
+
+
+function refreshSlots() {
+    repeatTimes = itemInventory.children.length
+    let j = 0
+    for (let i = 0; i < repeatTimes; i++) {
+        const slot = itemInventory.children[j];
+
+        if (slot.classList.contains("slot")) {
+            slot.remove()
+        }
+        else {
+            j++
+        }
+    }
+    while (itemInventory.children.length < 6) {
+        const slot = document.createElement("div")
+        slot.classList.add("slot")
+        itemInventory.appendChild(slot)
+        console.log("Added slot")
+    }
 }

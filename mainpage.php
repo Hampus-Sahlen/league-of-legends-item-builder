@@ -39,14 +39,35 @@ $items = $dbObject -> query_nofetch(
         } ?>
     </div>
 
-    <header>
+    <header class="top-nav">
         <h1>Hampus Sahlen</h1>
-        <a href="login.php?logout=true">Log out</a>
+        <a href="login.php?logout=true" class="logout-btn">Log out</a>
     </header>
-    <main>
-        <div id="itemStorage"></div>
-        <div id="itemInventory"></div>
-        <div id="itemStats"></div>
+
+    <main class="builder-container">
+
+        <div id="storage-container" class="panel storage">
+            <h2>Item Shop</h2>
+            <div id="itemStorage" class="item-grid"></div>
+        </div>
+
+        <div id="inventory-container" class="panel inventory">
+            <h2>Your Build</h2>
+            <div id="itemInventory" class="inventory-grid">
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+                <div class="slot"></div>
+            </div>
+        </div>
+
+        <div id="stats-container" class="panel stats">
+            <h2>Total Stats</h2>
+            <div id="itemStats" class="stats-list"></div>
+        </div>
+
     </main>
 </body>
 </html>
