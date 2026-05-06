@@ -1,0 +1,151 @@
+@font-face {
+    font-family: 'League';
+    src: url('../fonts/League.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0a1428;
+    color: #f0e6d2;
+    font-family: 'League', 'Georgia', serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: rgba(1, 10, 19, 0.9);
+    border-bottom: 2px solid #c8aa6e;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.top-nav h1 {
+    color: #c8aa6e;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+}
+
+.logout-btn {
+    color: #c8aa6e;
+    text-decoration: none;
+    border: 1px solid #c8aa6e;
+    padding: 8px 16px;
+    transition: 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c8aa6e;
+    color: #0a1428;
+}
+
+.builder-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 40px;
+    justify-content: center;
+    align-items: flex-start;
+    flex: 1;
+}
+
+.panel {
+    background-color: rgba(1, 10, 19, 0.8);
+    border: 2px solid #463714;
+    border-radius: 5px;
+    padding: 20px;
+    min-height: 350px;
+}
+
+.panel h2 {
+    color: #c8aa6e;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    border-bottom: 1px solid #c8aa6e;
+    padding-bottom: 10px;
+}
+
+.storage {
+    flex: 2;
+    min-width: 300px;
+}
+
+.item-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: flex-start;
+}
+
+.inventory {
+    flex: 1;
+    min-width: 250px;
+}
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.slot {
+    width: 64px;
+    height: 64px;
+    background-color: #010a13;
+    border: 1px dashed #463714;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stats {
+    flex: 1;
+    min-width: 250px;
+}
+
+.stats-list p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #f0e6d2;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #2a2a2a;
+    padding-bottom: 5px;
+}
+
+.stats-list span {
+    color: #00ff9d;
+    font-weight: bold;
+}
+
+.item {
+    cursor: grab;
+}
+
+/* .item:active {
+    cursor: grabbing;
+} */
+
+.item img {
+    width: 64px;
+    height: 64px;
+    border: 2px solid #463714;
+    transition: 0.2s ease;
+    display: block;
+}
+
+.item img:hover {
+    border-color: #c8aa6e;
+    box-shadow: 0 0 10px rgba(200, 170, 110, 0.8);
+}
