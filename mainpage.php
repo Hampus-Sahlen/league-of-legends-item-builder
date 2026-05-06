@@ -16,27 +16,22 @@ $items = $dbObject -> query_nofetch(
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>League Item Builder</title>
     <link rel="stylesheet" href="style/mainpage.css">
     <script src="script/item_builder.js" defer></script>
 </head>
 <body>
     <div id="importDiv">
-        <?php while ($item = $items -> fetch_assoc()) {
-            echo "<div>";
-            foreach ($item as $key => $val) { 
-                if ($val !== null) {
-                    echo "<div>";
-                    echo "<h1>";
-                    echo $key;
-                    echo "</h1><p>";
-                    echo $val;
-                    echo "</p>";
-                    echo "</div>";
-                }
-            }
-            echo "</div>";
-        } ?>
+    <?php while ($item = $items -> fetch_assoc()): ?>
+        <div>
+        <?php foreach ($item as $key => $val): if ($val !== null): ?>
+            <div>
+                <h1><?php echo $key; ?></h1>
+                <p><?php echo $val; ?></p>
+            </div>
+        <?php endif; endforeach ?>
+        </div>
+    <?php endwhile ?>
     </div>
 
     <header class="top-nav">
@@ -54,12 +49,6 @@ $items = $dbObject -> query_nofetch(
         <div id="inventory-container" class="panel inventory">
             <h2>Your Build</h2>
             <div id="itemInventory" class="inventory-grid">
-                <div class="slot"></div>
-                <div class="slot"></div>
-                <div class="slot"></div>
-                <div class="slot"></div>
-                <div class="slot"></div>
-                <div class="slot"></div>
             </div>
         </div>
 

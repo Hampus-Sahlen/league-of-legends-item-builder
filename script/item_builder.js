@@ -3,10 +3,7 @@ const itemStorage = document.querySelector("#itemStorage")
 const itemInventory = document.querySelector("#itemInventory")
 const itemStats = document.querySelector("#itemStats")
 let dragObjects = new Array
-
-
-importDiv.remove()
-
+let items = new Array
 
 const statNameTranslation = {
     "health": "Health",
@@ -36,36 +33,51 @@ const statNameTranslation = {
 }
 
 
-let items = new Array
-
-for (let i = 0; i < importDiv.children.length; i++) {
-    const item = importDiv.children[i];
+document.addEventListener("DOMContentLoaded", e=>{ // setup when page loads
+    importItems() // import items
+    refreshSlots() // create the slots
     
-    let tempArr = new Object
+    itemInventory.classList.add("js-itemContainer")
+    itemStorage.classList.add("js-itemContainer")
 
-    for (let i = 0; i < item.children.length; i++) {
-        const stat = item.children[i];
-        tempArr[stat.children[0].innerHTML] = stat.children[1].innerHTML // key = value
+    document.addEventListener("mouseup", stopDraggingObjects)
+    document.addEventListener("mousemove", moveDraggedObjects)
+})
+
+
+function importItems() {
+    importDiv.remove()
+
+    for (let i = 0; i < importDiv.children.length; i++) {
+        const item = importDiv.children[i];
+        
+        let tempArr = new Object
+
+        for (let i = 0; i < item.children.length; i++) {
+            const stat = item.children[i];
+            tempArr[stat.children[0].innerHTML] = stat.children[1].innerHTML // key = value
+        }
+
+        items.push(tempArr)
     }
 
-    items.push(tempArr)
+    items.forEach((item, index) => {
+        // add image
+        let image = document.createElement("img") 
+        image.src = "images/" + item["image"]
+        image.alt = item["name"]
+        // add article container with index value in dataset to find item stats later
+        let article = document.createElement("article")
+        article.dataset["index"] = index
+        article.title = item["name"] // hover over shows the name of the item
+        article.appendChild(image) 
+        // add eventlistener for moving into another zone
+        article.addEventListener("mousedown", startDraggingObject)
+        // add item to itemstorage
+        itemStorage.appendChild(article)
+    })
 }
 
-items.forEach((item, index) => {
-    // add image
-    let image = document.createElement("img") 
-    image.src = "images/" + item["image"]
-    image.alt = item["name"]
-    // add article container with index value in dataset to find item stats later
-    let article = document.createElement("article")
-    article.dataset["index"] = index
-    article.title = item["name"] // hover over shows the name of the item
-    article.appendChild(image) 
-    // add eventlistener for moving into another zone
-    article.addEventListener("mousedown", startDraggingObject)
-    // add item to itemstorage
-    itemStorage.appendChild(article)
-})
 
 
 
@@ -86,7 +98,6 @@ function startDraggingObject(e) { // start dragging an object
     dragObjects = document.querySelectorAll(".js-dragObject")
 }
 
-document.addEventListener("mousemove", moveDraggedObjects)
 function moveDraggedObjects(e) { // move all objects that are currently being dragged
     dragObjects.forEach(element => {
         element.style.left = e.clientX - Number(element.dataset.offsetX) + "px"
@@ -94,9 +105,6 @@ function moveDraggedObjects(e) { // move all objects that are currently being dr
     });
 }
 
-itemInventory.classList.add("js-itemContainer")
-itemStorage.classList.add("js-itemContainer")
-document.addEventListener("mouseup", stopDraggingObjects)
 function stopDraggingObjects(e) {
     // stop holding objects when mouse is relesed
     dragObjects.forEach(element => {
@@ -109,17 +117,29 @@ function stopDraggingObjects(e) {
             // creates hitbox for itemContainer, checks if mouse is inside hitbox
             if ((e.clientX >= rect.left && e.clientX <= rect.right) && (e.clientY >= rect.top && e.clientY <= rect.bottom)) {
                 // item was dropped on the container
+                console.info("dropped on", container)
                 if (container === itemInventory) {
-                    if (itemInventory.children.length > 6) {
+                    let hasSlot = false
+                    for (let i = 0; i < itemInventory.children.length; i++) {
+                        const slot = itemInventory.children[i];
+                        if (slot.classList.contains("slot")) {
+                            hasSlot = true
+                        }
+                    }
+                    if (hasSlot) {
                         console.info("reassigning", element, "to", container)
                         container.appendChild(element);
                         updateStatView() // update the stats displayed
+                        refreshSlots()
+                    } else {
+                        console.info("itemInventory already has 6 items")
                     }
                 } 
                 else {
                 console.info("reassigning", element, "to", container)
                 container.appendChild(element);
                 updateStatView() // update the stats displayed
+                refreshSlots()
                 }
             }
         });
@@ -136,6 +156,9 @@ function updateStatView() {
     finishedStats.groups = new Array
 
     for (let i = 0; i < itemInventory.children.length; i++) {
+        if (itemInventory.children[i].classList.contains("slot")) {
+            continue
+        }
         let item = items[itemInventory.children[i].dataset["index"]];
         item = structuredClone(item) // edit item without modifying the stored item
         finishedStats.abilities.push(item["ability"])
@@ -163,18 +186,18 @@ function updateStatView() {
     itemStats.innerHTML = ""
     
     p = document.createElement("p")
-    p.innerHTML = "Total cost: "+finishedStats.cost // display total cost
+    p.innerHTML = "Total cost: <span>" + finishedStats.cost + "</span>" // display total cost
     itemStats.appendChild(p)
 
     finishedStats.abilities.forEach(ability=>{ // display abilities of all items (if there is one)
         if (typeof ability !== 'undefined') {
             p = document.createElement("p")
-            p.innerHTML = "Ability: "+ability
+            p.innerHTML = "Ability: " + ability
             itemStats.appendChild(p)
         }
     })
 
-    percentStats = [
+    const percentStats = [
         "slow-resist",
         "heal-and-shield-power",
         "tenacity",
@@ -196,10 +219,13 @@ function updateStatView() {
     
     Object.keys(finishedStats).sort().forEach(key=>{ // display each stat
         p = document.createElement("p")
-        p.innerHTML = statNameTranslation[key]+": "+finishedStats[key]
+        p.innerHTML = statNameTranslation[key]+": "
+        span = document.createElement("span")
+        span.innerHTML = finishedStats[key]
         if (percentStats.includes(key)) { // if stat is a percent stat, add percent to the end
-            p.innerHTML += "%"
+            span.innerHTML += "%"
         }
+        p.appendChild(span)
         itemStats.appendChild(p)
     })
 }
