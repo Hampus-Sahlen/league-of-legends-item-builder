@@ -22,7 +22,7 @@ $items = $dbObject -> query_nofetch(
 </head>
 <body>
     <div id="importDiv">
-        <?php while ($item = $items -> fetch_assoc()): 
+        <?php while ($item = $items -> fetch_assoc()) {
             echo "<div>";
             foreach ($item as $key => $val) { 
                 if ($val !== null) {
@@ -36,7 +36,7 @@ $items = $dbObject -> query_nofetch(
                 }
             }
             echo "</div>";
-        endwhile ?>
+        } ?>
     </div>
 
     <header>
