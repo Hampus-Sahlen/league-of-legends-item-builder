@@ -1,7 +1,7 @@
 <?php
 require_once "../helpers/init.php";
 
-// 1. Definiera dina kolumner
+// The columns we want to insert into the database
 $columns = [
     "name" => "name",
     "cost"  => "cost",
@@ -36,7 +36,7 @@ $columns = [
 
 $message = "";
 
-// 2. Kontrollera om formuläret har skickats via POST
+// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $insertColumns = [];
     $placeholders = [];
@@ -45,24 +45,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     foreach ($columns as $dbCol => $label) {
         if (isset($_POST[$dbCol])) {
             $insertColumns[] = $dbCol;
-            $placeholders[] = "?"; // Skapar ett frågetecken för varje kolumn
+            $placeholders[] = "?"; // Makes a placeholder for each column
             
-            // Trimma bort eventuella mellanslag och kolla om fältet är tomt
+            // Trim the input value and check if it's empty
             $val = trim($_POST[$dbCol]);
             
-            // Om fältet är tomt, skicka null - annars skicka värdet
+            // If the field is empty, send null - otherwise send the value
             $values[] = ($val === "") ? null : $val;
         }
     }
 
-    // 3. Bygg och kör SQL-frågan
+    // Build the SQL query only if there are columns to insert
     if (!empty($insertColumns)) {
-        // Observera backticks runt kolumnnamnen och tabellnamnet "item"
+        // Insert the new item and get the new ID
         $sql = "INSERT INTO item (`" . implode("`, `", $insertColumns) . "`) 
                 VALUES (" . implode(", ", $placeholders) . ")";
         
         try {
-            // Använder din metod från database.php för att spara och hämta det nya ID:t
             $newId = $dbObject->insertAndGetID($sql, $values);
             $message = "Saved with ID: " . $newId;
         } catch (Exception $e) {
@@ -84,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
 
-    <h1>Add new item to database (like a boss)</h1>
+    <h1>Add new item to database</h1>
 
     <?php if ($message): ?>
         <div class="message"><?php echo es($message); ?></div>
