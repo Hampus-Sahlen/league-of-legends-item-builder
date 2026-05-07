@@ -124,6 +124,11 @@ body {
     padding-bottom: 5px;
 }
 
+.stats-list p .ability {
+    font-size: 0.8rem;
+    font-weight: 200;
+}
+
 .stats-list span {
     color: #00ff9d;
     font-weight: bold;
