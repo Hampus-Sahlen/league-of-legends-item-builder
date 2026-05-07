@@ -1,4 +1,5 @@
 <?php
+// documentation https://docs.google.com/document/d/1M4vFmgnGQlnSS8qmiZ4SVyzixE4QK-1tPX_lmDFmVyA/edit?tab=t.o4cuwxi3dm7h
     class DatabaseConnection {
 
         private $conn;
@@ -32,6 +33,26 @@
             $stmt->close();
 
             return $data;
+        }
+
+        public function query_nofetch(string $query, array $values=[]) {
+            // same as query, but returns the data without running fetch_all
+
+            $stmt = $this->conn->prepare($query);
+
+            if (!$stmt) {
+                throw new Exception("Prepare failed " . $this->conn->error);
+            }
+            // make sure youre running a minimum of PHP8.1
+            if (!$stmt->execute($values)) {
+                throw new Exception("Execute failed: " . $stmt->error);
+            }
+
+            $result = $stmt->get_result();
+
+            $stmt->close();
+
+            return $result;
         }
 
         public function write(string $query, array $values=[]) {
