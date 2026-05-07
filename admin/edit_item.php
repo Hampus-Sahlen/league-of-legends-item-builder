@@ -1,7 +1,6 @@
 <?php
-require_once "init.php";
-
-// 1. Definiera dina kolumner (Korrigerad movement-speed-percent)
+require_once "../helpers/init.php";
+checkPermission(1, "../login.php"); // Only allow access to users with access level 1 (admin)
 $columns = [
     "name" => "name",
     "cost"  => "cost",
@@ -35,94 +34,80 @@ $columns = [
 ];
 
 $message = "";
-$item = null;
-
-// 2. Hämta ID från URL:en (t.ex. edit_item.php?id=5)
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    die("Ett ID krävs för att kunna redigera ett objekt.");
+    die("No item ID specified.");
 }
 
-// 3. Hantera POST-förfrågan (när formuläret sparas)
+// Hantera sparande (UPDATE)
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $updateColumns = [];
+    $updateParts = [];
     $values = [];
 
     foreach ($columns as $dbCol => $label) {
         if (isset($_POST[$dbCol])) {
-            $updateColumns[] = "`$dbCol` = ?";
-            $values[] = $_POST[$dbCol];
+            $updateParts[] = "`$dbCol` = ?";
+            $val = trim($_POST[$dbCol]);
+            $values[] = ($val === "") ? null : $val;
         }
     }
 
-    if (!empty($updateColumns)) {
-        // Lägg till ID sist i values-arrayen för WHERE-satsen
-        $values[] = $id;
-
-        // Använder rätt tabellnamn "item" istället för "items"
-        $sql = "UPDATE item SET " . implode(", ", $updateColumns) . " WHERE ID = ?";
+    if (!empty($updateParts)) {
+        $values[] = $id; 
+        $sql = "UPDATE item SET " . implode(", ", $updateParts) . " WHERE ID = ?";
         
         try {
-            // Använder write() från din databas-klass för att köra UPDATE
-            $dbObject->write($sql, $values); 
-            $message = "Lyckades! Objektet uppdaterades.";
+            $dbObject->write($sql, $values);
+            $message = "The item has been updated successfully!";
         } catch (Exception $e) {
-            $message = "Fel vid uppdatering: " . $e->getMessage();
+            $message = "Error: " . $e->getMessage();
         }
     }
 }
 
-// 4. Hämta befintlig data för att förifylla formuläret
+// Get the current item data to pre-fill the form
 try {
     $sql = "SELECT * FROM item WHERE ID = ?";
-    
-    // Använder query() från din databasklass. 
-    // Eftersom query() returnerar en array av rader, sparar vi den i $result.
-    $result = $dbObject->query($sql, [$id]); 
-    
-    if (!empty($result)) {
-        // Plocka ut den första raden (index 0) ur arrayen
-        $item = $result[0];
-    } else {
-        die("Kunde inte hitta något objekt med ID: " . es($id));
-    }
+    $result = $dbObject->query($sql, [$id]);
+    if (empty($result)) die("The item was not found.");
+    $currentItem = $result[0];
 } catch (Exception $e) {
-    die("Fel vid hämtning av data: " . $e->getMessage());
+    die("Error: " . $e->getMessage());
 }
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Redigera objekt</title>
-    <style>
-        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; width: 300px; }
-        .message { padding: 10px; background: #e0f0e0; margin-bottom: 20px; border-radius: 4px; }
+    <title>Edit Item</title>
+    <link rel="stylesheet" href="../style.css"> <style>
+        body { font-family: sans-serif; padding: 20px; background: #1a1a1a; color: white; }
+        .form-group { margin-bottom: 10px; display: flex; flex-direction: column; width: 300px; }
+        input { padding: 8px; background: #333; border: 1px solid #444; color: white; }
+        .btn-save { background: #c89b3c; color: black; padding: 10px; border: none; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .back-link { color: #00bcff; text-decoration: none; display: block; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-    <h1>Redigera objekt #<?php echo es($id); ?></h1>
+    <a href="selection.php" class="back-link">← Back to List</a>
+
+    <h1>Edit: <?php echo es($currentItem['name']); ?></h1>
 
     <?php if ($message): ?>
-        <div class="message"><?php echo es($message); ?></div>
+        <p style="color: #00ff00;"><?php echo es($message); ?></p>
     <?php endif; ?>
 
-    <form method="POST" action="edit_item.php?id=<?php echo es($id); ?>">
+    <form method="POST">
         <?php foreach ($columns as $dbCol => $label): ?>
             <div class="form-group">
-                <label for="<?php echo es($dbCol); ?>"><?php echo es($label); ?></label>
-                <input type="text" 
-                       name="<?php echo es($dbCol); ?>" 
-                       id="<?php echo es($dbCol); ?>" 
-                       value="<?php echo isset($item[$dbCol]) ? es($item[$dbCol]) : ''; ?>">
+                <label><?php echo es(ucfirst($label)); ?></label>
+                <input type="text" name="<?php echo es($dbCol); ?>" value="<?php echo es($currentItem[$dbCol] ?? ''); ?>">
             </div>
         <?php endforeach; ?>
-
-        <button type="submit">Uppdatera i databasen</button>
+        <button type="submit" class="btn-save">Save Changes</button>
     </form>
 
 </body>
