@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body>
 
     <h1>Add new item to database</h1>
-    <a href="selection.php" class="back-link">← Back To list</a>
+    <a href="." class="back-link">← Back To list</a>
     <?php if ($message): ?>
         <div class="message"><?php echo es($message); ?></div>
     <?php endif; ?>

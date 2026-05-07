@@ -92,7 +92,7 @@ try {
 </head>
 <body>
 
-    <a href="selection.php" class="back-link">← Back to List</a>
+    <a href="." class="back-link">← Back to List</a>
 
     <h1>Edit: <?php echo es($currentItem['name']); ?></h1>
 
