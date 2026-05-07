@@ -1,6 +1,6 @@
 <?php
 require_once "../helpers/init.php";
-
+checkPermission(1, "../login.php"); // Only allow access to users with access level 1 (admin)
 $items = $dbObject->query("SELECT ID, name, cost, image FROM item ORDER BY name ASC");
 ?>
 <!DOCTYPE html>

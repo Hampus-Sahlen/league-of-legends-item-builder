@@ -1,6 +1,6 @@
 <?php
 require_once "../helpers/init.php";
-
+checkPermission(1, "../login.php"); // Only allow access to users with access level 1 (admin)
 // The columns we want to insert into the database
 $columns = [
     "name" => "name",

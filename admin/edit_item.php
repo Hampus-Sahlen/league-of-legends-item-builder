@@ -1,6 +1,6 @@
 <?php
 require_once "../helpers/init.php";
-
+checkPermission(1, "../login.php"); // Only allow access to users with access level 1 (admin)
 $columns = [
     "name" => "name",
     "cost"  => "cost",
