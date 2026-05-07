@@ -133,9 +133,9 @@ body {
     cursor: grab;
 }
 
-.item:active {
+/* .item:active {
     cursor: grabbing;
-}
+} */
 
 .item img {
     width: 64px;
