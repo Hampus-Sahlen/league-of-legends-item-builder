@@ -105,6 +105,11 @@ function moveDraggedObjects(e) { // move all objects that are currently being dr
         element.style.left = e.clientX - Number(element.dataset.offsetX) + "px"
         element.style.top = e.clientY - Number(element.dataset.offsetY) + "px"
     });
+    if (dragObjects.length > 0) {
+        if (e.clientY <= 10) {
+            window.scroll(window.scrollX, window.scrollY-10)
+        }
+    }
 }
 
 function stopDraggingObjects(e) {
