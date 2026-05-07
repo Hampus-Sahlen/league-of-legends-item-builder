@@ -37,7 +37,7 @@ $message = "";
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    die("Inget ID angavs. Gå tillbaka till listan och välj ett föremål.");
+    die("No item ID specified.");
 }
 
 // Hantera sparande (UPDATE)
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-// Hämta data för att visa i formuläret
+// Get the current item data to pre-fill the form
 try {
     $sql = "SELECT * FROM item WHERE ID = ?";
     $result = $dbObject->query($sql, [$id]);

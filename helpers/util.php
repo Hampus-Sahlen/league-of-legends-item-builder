@@ -22,10 +22,6 @@ function requireLogin(string $loginPage="./") {
 }
 
 function checkPermission($accessLevel, $loginPage) { // redirects to loginpage if users accesslevel is not the same as $accessLevel
-    $loginPage = rtrim($loginPage, "/") . "/";
-    if ($loginPage === "/") {
-        $loginPage = "./";
-    }
     if (empty($_SESSION["accessLevel"])){
         redirect($loginPage . "");
     }
