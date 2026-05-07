@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'League';
-    src: url('../fonts/League.otf') format('truetype');
+    src: url('../fonts/League.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
@@ -25,9 +25,9 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
-    background-color: rgba(1, 10, 19, 0.9);
+    background-color: #010a13e6;
     border-bottom: 2px solid #c8aa6e;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 10px #00000080;
 }
 
 .top-nav h1 {
@@ -60,7 +60,7 @@ body {
 }
 
 .panel {
-    background-color: rgba(1, 10, 19, 0.8);
+    background-color: #010a13cc;
     border: 2px solid #463714;
     border-radius: 5px;
     padding: 20px;
@@ -147,5 +147,5 @@ body {
 
 .item img:hover {
     border-color: #c8aa6e;
-    box-shadow: 0 0 10px rgba(200, 170, 110, 0.8);
+    box-shadow: 0 0 10px #c8aa6ecc;
 }

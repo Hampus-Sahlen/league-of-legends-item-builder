@@ -1,22 +1,20 @@
+@font-face {
+    font-family: 'League';
+    src: url('../fonts/League.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-@font-face {
-    font-family: 'League';
-    src: url('../fonts/League.otf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
 body {
     background-color: #0a1428;
     color: #f0e6d2;
-
     font-family: 'League', 'Georgia', serif;
-
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -33,12 +31,12 @@ header {
 }
 
 form {
-    background-color: rgba(1, 10, 19, 0.8);
+    background-color: #010a13cc;
     border: 2px solid #c8aa6e;
     padding: 30px;
     width: 100%;
     max-width: 400px;
-    box-shadow: 0 0 15px rgba(200, 170, 110, 0.2);
+    box-shadow: 0 0 15px #c8aa6e33;
     border-radius: 5px;
 }
 
@@ -81,14 +79,14 @@ input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus {
     border-color: #c8aa6e;
-    box-shadow: 0 0 5px rgba(200, 170, 110, 0.5);
+    box-shadow: 0 0 5px #c8aa6e80;
 }
 
 button {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
-    background-color: transparent;
+    background-color: #00000000;
     color: #c8aa6e;
     border: 2px solid #c8aa6e;
     font-size: 1.1rem;
