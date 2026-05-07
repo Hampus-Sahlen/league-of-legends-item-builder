@@ -5,7 +5,7 @@ if (PHP_VERSION_ID < 80100) { // php 8.1+ is required for page to run properly
 }
 
 // disable error reporting in prod
-// error_reporting(0); 
+error_reporting(0); 
 
 session_start(); // use session for login status
 
@@ -13,5 +13,5 @@ require_once "util.php"; // contains utility functions
 
 require_once "database.php"; // contains database wrapper class
 
-require_once "database_credentials.php"; // contains db credentials, included in gitignore
+require_once "database_credentials.php"; // contains db credentials
 $dbObject = new DatabaseConnection($host, $user, $password, $database);
