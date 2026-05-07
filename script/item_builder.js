@@ -192,12 +192,13 @@ function updateStatView() {
     p.innerHTML = "Total cost: <span>" + finishedStats.cost + "</span>" // display total cost
     itemStats.appendChild(p)
 
+    let abilityList = []
     finishedStats.abilities.forEach(ability=>{ // display abilities of all items (if there is one)
         if (typeof ability !== 'undefined') {
             p = document.createElement("p")
             p.innerHTML = "Ability: " + ability
             p.classList.add("ability")
-            itemStats.appendChild(p)
+            abilityList.push(p)
         }
     })
 
@@ -230,6 +231,10 @@ function updateStatView() {
             span.innerHTML += "%"
         }
         p.appendChild(span)
+        itemStats.appendChild(p)
+    })
+
+    abilityList.forEach(p => {
         itemStats.appendChild(p)
     })
 }
