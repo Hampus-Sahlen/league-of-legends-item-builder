@@ -5,7 +5,7 @@ const itemStats = document.querySelector("#itemStats")
 let dragObjects = new Array
 let items = new Array
 
-const statNameTranslation = {
+const statNameTranslation = { // translate db names into human readable names
     "health": "Health",
     "health-regen": "Health Regeneration",
     "heal-and-shield-power": "Heal and Shield Power",
@@ -31,6 +31,22 @@ const statNameTranslation = {
     "armor-pen-percent": "Armor Penetration",
     "magic-pen-percent": "Magic Penetration"
 }
+
+const percentStats = [ // all stats that should have a % behind them
+    "slow-resist",
+    "heal-and-shield-power",
+    "tenacity",
+    "attack-speed",
+    "omnivamp",
+    "life-steal",
+    "mana-regen",
+    "health-regen",
+    "crit-damage",
+    "crit-chance",
+    "movement-speed-percent", 
+    "armor-pen-percent", 
+    "magic-pen-percent"
+]
 
 
 document.addEventListener("DOMContentLoaded", e=>{ // setup when page loads
@@ -152,7 +168,7 @@ function stopDraggingObjects(e) {
             }
         });
     });
-    dragObjects = document.querySelectorAll(".js-dragObject")
+    dragObjects = document.querySelectorAll(".js-dragObject") // refresh dragObjects
 }
 
 function updateStatView() {
@@ -197,8 +213,8 @@ function updateStatView() {
     p.innerHTML = "Total cost: <span>" + finishedStats.cost + "</span>" // display total cost
     itemStats.appendChild(p)
 
-    let abilityList = []
-    finishedStats.abilities.forEach(ability=>{ // display abilities of all items (if there is one)
+    let abilityList = [] // temporaraly store abilities to display them at the bottom of the list 
+    finishedStats.abilities.forEach(ability=>{ // compile abilities
         if (typeof ability !== 'undefined') {
             p = document.createElement("p")
             p.innerHTML = "Ability: " + ability
@@ -207,30 +223,15 @@ function updateStatView() {
         }
     })
 
-    const percentStats = [
-        "slow-resist",
-        "heal-and-shield-power",
-        "tenacity",
-        "attack-speed",
-        "omnivamp",
-        "life-steal",
-        "mana-regen",
-        "health-regen",
-        "crit-damage",
-        "crit-chance",
-        "movement-speed-percent", 
-        "armor-pen-percent", 
-        "magic-pen-percent"
-    ]
 
     delete finishedStats["abilities"]
     delete finishedStats["cost"]
     delete finishedStats["groups"]
     
-    Object.keys(finishedStats).sort().forEach(key=>{ // display each stat
+    Object.keys(finishedStats).sort().forEach(key=>{ // display each stat other than cost and abilities in alphabetical order
         p = document.createElement("p")
         p.innerHTML = statNameTranslation[key]+": "
-        span = document.createElement("span")
+        span = document.createElement("span") // add the values to a <span> to display them differently
         span.innerHTML = finishedStats[key]
         if (percentStats.includes(key)) { // if stat is a percent stat, add percent to the end
             span.innerHTML += "%"
@@ -239,7 +240,7 @@ function updateStatView() {
         itemStats.appendChild(p)
     })
 
-    abilityList.forEach(p => {
+    abilityList.forEach(p => { // display abilities
         itemStats.appendChild(p)
     })
 }
@@ -258,6 +259,7 @@ function refreshSlots() {
             j++
         }
     }
+    
     while (itemInventory.children.length < 6) {
         const slot = document.createElement("div")
         slot.classList.add("slot")
