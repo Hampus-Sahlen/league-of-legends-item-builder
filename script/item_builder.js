@@ -196,6 +196,7 @@ function updateStatView() {
         if (typeof ability !== 'undefined') {
             p = document.createElement("p")
             p.innerHTML = "Ability: " + ability
+            p.classList.add("ability")
             itemStats.appendChild(p)
         }
     })
