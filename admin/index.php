@@ -14,6 +14,7 @@ $items = $dbObject->query("SELECT ID, name, cost, image FROM item ORDER BY name 
         .item-image { width: 64px; height: 64px; display: block; margin: 0 auto 10px; border: 1px solid #5b5a56; }
         .btn-edit { color: #00bcff; text-decoration: none; font-size: 0.8em; border: 1px solid #00bcff; padding: 2px 5px; }
         .btn-create { background: #c89b3c; color: black; padding: 10px 20px; text-decoration: none; font-weight: bold; }
+        .btn-creatine { background: #c89b3c; color: black; padding: 10px 20px; text-decoration: none; font-weight: bold; margin-top: 20px; display: inline-block; }
     </style>
 </head>
 <body>
@@ -34,6 +35,6 @@ $items = $dbObject->query("SELECT ID, name, cost, image FROM item ORDER BY name 
             </div>
         <?php endforeach; ?>
     </div>
-
+            <a href="../login.php" class="btn-creatine">LOG OUT</a>
 </body>
 </html>
