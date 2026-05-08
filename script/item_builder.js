@@ -242,6 +242,8 @@ function updateStatView() {
     delete finishedStats["groups"]
     
     Object.keys(finishedStats).sort().forEach(key=>{ // display each stat other than cost and abilities in alphabetical order
+        if (finishedStats[key] === 0) return;
+
         p = document.createElement("p")
         p.innerHTML = statNameTranslation[key]+": "
         span = document.createElement("span") // add the values to a <span> to display them differently
