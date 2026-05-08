@@ -117,6 +117,10 @@ function startDraggingObject(e) { // start dragging an object
     this.style.bottom = ""
     this.style.right = ""
     this.style.position = "fixed"
+
+    // add placeholder where item used to be
+    addPlaceholder(this)
+
     // make object a dragObject
     this.classList.add("js-dragObject")
     this.style.cursor = "grabbing"
@@ -137,6 +141,9 @@ function moveDraggedObjects(e) { // move all objects that are currently being dr
 }
 
 function stopDraggingObjects(e) {
+    // remove placeholders
+    removePlaceholders()
+
     // stop holding objects when mouse is relesed
     dragObjects.forEach(element => {
         // remove dragging properties
@@ -380,4 +387,33 @@ function moveItemStatsDisplay(e) {
         hoverStatsContainer.style.display = ""
         document.removeEventListener("mousemove", moveItemStatsDisplay)
     }
+}
+
+
+function addPlaceholder(element) { 
+    /* makes a placeholder div with dimensions identical to element, inserting it before element 
+    expects element to be removed
+    placeholder has class "js-placeholder" and can be removed by selecting the class
+    */
+    const rect = element.getBoundingClientRect()
+
+    let placeholder = document.createElement("div")
+    placeholder.classList.add("js-placeholder")
+
+    switch (element.parentNode) {
+        case itemInventory:
+            placeholder.classList.add("slot")
+            break
+        default:
+            placeholder.style.height = rect.height + "px"
+            placeholder.style.width = rect.width + "px"
+    }
+
+    element.parentNode.insertBefore(placeholder, element)
+}
+
+function removePlaceholders() {
+    document.querySelectorAll(".js-placeholder").forEach(placeholder => {
+        placeholder.remove()
+    })
 }
