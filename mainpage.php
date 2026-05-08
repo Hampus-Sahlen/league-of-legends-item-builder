@@ -35,7 +35,7 @@ if (!empty($_SESSION["UUID"])) {
         <div>
         <?php foreach ($item as $key => $val): if ($val !== null): ?>
             <div>
-                <h1><?php echo $key; ?></h1>
+                <p><?php echo $key; ?></p>
                 <p><?php echo $val; ?></p>
             </div>
         <?php endif; endforeach ?>
