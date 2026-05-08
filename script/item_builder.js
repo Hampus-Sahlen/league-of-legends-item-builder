@@ -52,6 +52,7 @@ const percentStats = [ // all stats that should have a % behind them
 document.addEventListener("DOMContentLoaded", e=>{ // setup when page loads
     importItems() // import items
     refreshSlots() // create the slots
+    updateStatView()
     
     itemInventory.classList.add("js-itemContainer")
     itemStorage.classList.add("js-itemContainer")
@@ -209,9 +210,13 @@ function updateStatView() {
     // display stats
     itemStats.innerHTML = ""
     
+    if (typeof finishedStats.cost === 'undefined') {
+        finishedStats.cost = 0
+    }
     p = document.createElement("p")
     p.innerHTML = "Total cost: <span>" + finishedStats.cost + "</span>" // display total cost
     itemStats.appendChild(p)
+
 
     let abilityList = [] // temporaraly store abilities to display them at the bottom of the list 
     finishedStats.abilities.forEach(ability=>{ // compile abilities
