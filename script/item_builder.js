@@ -138,7 +138,15 @@ function stopDraggingObjects(e) {
         element.style.position = ""
         // assign item to a new container if dropped on one 
         document.querySelectorAll(".js-itemContainer").forEach(container => {
-            const rect = container.getBoundingClientRect();
+            let rect = container.getBoundingClientRect()
+            switch (container) { // may set hitbox to something larger than container
+                case itemInventory:
+                    rect = inventoryContainer.getBoundingClientRect()
+                    break
+                case itemStorage:
+                    rect = storageContainer.getBoundingClientRect()
+                    break
+            }
             // creates hitbox for itemContainer, checks if mouse is inside hitbox
             if ((e.clientX >= rect.left && e.clientX <= rect.right) && (e.clientY >= rect.top && e.clientY <= rect.bottom)) {
                 // item was dropped on the container
