@@ -30,18 +30,18 @@ if (!empty($_SESSION["UUID"])) {
     <script src="script/item_builder.js" defer></script>
 </head>
 <body>
-    <div id="importDiv" style="display: none;">
+    <code id="importDiv" style="display: none;">
     <?php while ($item = $items -> fetch_assoc()): ?>
         <div>
         <?php foreach ($item as $key => $val): if ($val !== null): ?>
             <div>
-                <h1><?php echo $key; ?></h1>
+                <p><?php echo $key; ?></p>
                 <p><?php echo $val; ?></p>
             </div>
         <?php endif; endforeach ?>
         </div>
     <?php endwhile ?>
-    </div>
+        </code>
 
     <header class="top-nav">
         <?php if (!empty($userInfo)): ?>
@@ -69,6 +69,11 @@ if (!empty($_SESSION["UUID"])) {
         <div id="stats-container" class="panel stats">
             <h2>Total Stats</h2>
             <div id="itemStats" class="stats-list"></div>
+        </div>
+
+        <div id="hover-stats-container" class="panel stats">
+            <h2 id="hoverStatsTitle"></h2>
+            <div id="hoverStats" class="stats-list"></div>
         </div>
 
     </main>
