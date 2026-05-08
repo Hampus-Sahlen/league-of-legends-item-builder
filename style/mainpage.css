@@ -143,7 +143,7 @@ body {
     cursor: grabbing;
 } */
 
-.item img {
+.item {
     width: 64px;
     height: 64px;
     border: 2px solid #463714;
@@ -151,7 +151,7 @@ body {
     display: block;
 }
 
-.item img:hover {
+.item:hover {
     border-color: #c8aa6e;
     box-shadow: 0 0 10px #c8aa6ecc;
 }
