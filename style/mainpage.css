@@ -155,3 +155,9 @@ body {
     border-color: #c8aa6e;
     box-shadow: 0 0 10px #c8aa6ecc;
 }
+
+#hover-stats-container {
+    position: absolute;
+    display: none;
+    width: 400px;
+}

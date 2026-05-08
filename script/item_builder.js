@@ -6,8 +6,10 @@ const inventoryContainer = document.querySelector("#inventory-container")
 const itemStats = document.querySelector("#itemStats")
 const hoverStats = document.querySelector("#hoverStats")
 const hoverStatsTitle = document.querySelector("#hoverStatsTitle")
+const hoverStatsContainer = document.querySelector("#hover-stats-container")
 let dragObjects = new Array
 let items = new Array
+let hoveredItem
 
 const statNameTranslation = { // translate db names into human readable names
     "health": "Health",
@@ -82,6 +84,7 @@ function importItems() {
         items.push(tempArr)
     }
 
+    // create items
     items.forEach((item, index) => {
         // add image
         let image = document.createElement("img") 
@@ -91,7 +94,6 @@ function importItems() {
         let article = document.createElement("article")
         article.classList.add("item")
         article.dataset["index"] = index
-        article.title = item["name"] // hover over shows the name of the item
         article.appendChild(image) 
         // add eventlistener for moving into another zone
         article.addEventListener("mousedown", startDraggingObject)
@@ -291,14 +293,22 @@ function refreshSlots() {
     }
 }
 
-function showStatsOfItem(e) {    
+function showStatsOfItem(e) {
+    if (this.classList.contains("js-dragObject")) return // do not show stats on a dragged object
+
+    hoveredItem = this
+    document.addEventListener("mousemove", moveItemStatsDisplay) // move stat display with the mouse, and remove it if mouse isnt on stat display or this item
+    // position info box
+    hoverStatsContainer.style.display = "block"
+    moveItemStatsDisplay(e)
+
+    // display stats
     let item = structuredClone(items[this.dataset["index"]])
     
     hoverStatsTitle.innerHTML = item["name"]
 
-    // display stats
     hoverStats.innerHTML = ""
-    
+
     if (typeof item.cost === 'undefined') {
         item.cost = 0
     }
@@ -340,4 +350,30 @@ function showStatsOfItem(e) {
     abilityList.forEach(p => { // display abilities
         hoverStats.appendChild(p)
     })
+}
+
+function moveItemStatsDisplay(e) {
+    if (hoveredItem.classList.contains("js-dragObject")) { // stop showing stats if object is being dragged
+        hoverStatsContainer.style.display = ""
+        document.removeEventListener("mousemove", moveItemStatsDisplay)
+        return
+    }
+
+    const rect = hoveredItem.getBoundingClientRect()
+    if ((e.clientX >= rect.left && e.clientX <= rect.right) && (e.clientY >= rect.top && e.clientY <= rect.bottom)) { // if cursor is above the item
+        // redo this and make it use the position it would be at if it wasnt offset last frame
+
+        // let offsetY = 0
+        // const statBoxRect = hoverStatsContainer.getBoundingClientRect()
+        // if (statBoxRect.bottom > window.innerHeight) { // if bottom of the box is below the bottom of the window
+        //     offsetY = statBoxRect.bottom - window.innerHeight + parseInt(hoverStatsContainer.dataset["offsetY"]) // returns the amount of pixels the bottom of the box would be below the bottom of the window
+        //     console.log(Math.round(statBoxRect.bottom), window.innerHeight, Math.round(offsetY))
+        // }
+        hoverStatsContainer.style.left = (e.clientX + window.scrollX) + "px"
+        hoverStatsContainer.style.top = (e.clientY + window.scrollY/* - offsetY */) + "px"
+    }
+    else {
+        hoverStatsContainer.style.display = ""
+        document.removeEventListener("mousemove", moveItemStatsDisplay)
+    }
 }
