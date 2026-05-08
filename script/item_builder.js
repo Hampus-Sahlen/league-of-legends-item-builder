@@ -65,6 +65,9 @@ document.addEventListener("DOMContentLoaded", e=>{ // setup when page loads
 
     document.addEventListener("mouseup", stopDraggingObjects)
     document.addEventListener("mousemove", moveDraggedObjects)
+
+    sortStorage(itemStorage)
+
 })
 
 
@@ -83,6 +86,9 @@ function importItems() {
 
         items.push(tempArr)
     }
+
+    // sort items in alpabetical order based on item name
+    items.sort((a, b) => a["name"].localeCompare(b["name"]))
 
     // create items
     items.forEach((item, index) => {
@@ -180,6 +186,7 @@ function stopDraggingObjects(e) {
                         container.appendChild(element);
                         updateStatView() // update the stats displayed
                         refreshSlots()
+                        sortStorage(itemStorage)
                     } 
                     // else {
                     //     console.info("itemInventory already has 6 items")
@@ -190,6 +197,7 @@ function stopDraggingObjects(e) {
                 container.appendChild(element);
                 updateStatView() // update the stats displayed
                 refreshSlots()
+                sortStorage(itemStorage)
                 }
             }
         });
@@ -416,4 +424,18 @@ function removePlaceholders() {
     document.querySelectorAll(".js-placeholder").forEach(placeholder => {
         placeholder.remove()
     })
+}
+
+function sortStorage(parent) {
+    const sortArray = []
+    for (let i = 0; i < parent.children.length; i++) {
+        const element = parent.children[i];
+        sortArray.push(element)
+    }
+
+    sortArray.forEach(element => element.remove())
+
+    sortArray.sort((a, b) => parseInt(a.dataset["index"]) - parseInt(b.dataset["index"]))
+
+    sortArray.forEach(element => parent.appendChild(element))
 }
