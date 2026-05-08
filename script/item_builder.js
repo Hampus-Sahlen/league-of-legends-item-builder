@@ -96,22 +96,16 @@ function importItems() {
         const image = document.createElement("img") 
         image.src = "images/" + item["image"]
         image.alt = item["name"]
-        
-        // // add article container with index value in dataset to find item stats later
-        // let article = document.createElement("article")
-        // article.classList.add("item")
-        // article.dataset["index"] = index
-        // article.appendChild(image) 
-
-        // make image the item instead
-        image.classList.add("item")
-        image.dataset["index"] = index
-
+        // add article container with index value in dataset to find item stats later
+        let article = document.createElement("article")
+        article.classList.add("item")
+        article.dataset["index"] = index
+        article.appendChild(image) 
         // add eventlistener for moving into another zone
-        image.addEventListener("mousedown", startDraggingObject)
-        image.addEventListener("mouseover", showStatsOfItem)
+        article.addEventListener("mousedown", startDraggingObject)
+        article.addEventListener("mouseover", showStatsOfItem)
         // add item to itemstorage
-        itemStorage.appendChild(image)
+        itemStorage.appendChild(article)
     })
 }
 
