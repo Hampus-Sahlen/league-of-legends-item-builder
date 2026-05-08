@@ -71,6 +71,11 @@ if (!empty($_SESSION["UUID"])) {
             <div id="itemStats" class="stats-list"></div>
         </div>
 
+        <div id="hover-stats-container" class="panel stats">
+            <h2 id="hoverStatsTitle"></h2>
+            <div id="hoverStats" class="stats-list"></div>
+        </div>
+
     </main>
 </body>
 </html>

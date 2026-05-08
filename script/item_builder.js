@@ -4,6 +4,8 @@ const storageContainer = document.querySelector("#storage-container")
 const itemInventory = document.querySelector("#itemInventory")
 const inventoryContainer = document.querySelector("#inventory-container")
 const itemStats = document.querySelector("#itemStats")
+const hoverStats = document.querySelector("#hoverStats")
+const hoverStatsTitle = document.querySelector("#hoverStatsTitle")
 let dragObjects = new Array
 let items = new Array
 
@@ -93,6 +95,7 @@ function importItems() {
         article.appendChild(image) 
         // add eventlistener for moving into another zone
         article.addEventListener("mousedown", startDraggingObject)
+        article.addEventListener("mouseover", showStatsOfItem)
         // add item to itemstorage
         itemStorage.appendChild(article)
     })
@@ -235,7 +238,7 @@ function updateStatView() {
     finishedStats.abilities.forEach(ability=>{ // compile abilities
         if (typeof ability !== 'undefined') {
             p = document.createElement("p")
-            p.innerHTML = "Ability: " + ability
+            p.innerHTML = ability
             p.classList.add("ability")
             abilityList.push(p)
         }
@@ -286,4 +289,55 @@ function refreshSlots() {
         itemInventory.appendChild(slot)
         // console.log("Added slot")
     }
+}
+
+function showStatsOfItem(e) {    
+    let item = structuredClone(items[this.dataset["index"]])
+    
+    hoverStatsTitle.innerHTML = item["name"]
+
+    // display stats
+    hoverStats.innerHTML = ""
+    
+    if (typeof item.cost === 'undefined') {
+        item.cost = 0
+    }
+    p = document.createElement("p")
+    p.innerHTML = "Cost: <span>" + item.cost + "</span>" // display total cost
+    hoverStats.appendChild(p)
+
+
+    let abilityList = [] // temporaraly store abilities to display them at the bottom of the list 
+    // compile abilities
+    if (typeof item.ability !== 'undefined') {
+        p = document.createElement("p")
+        p.innerHTML = item.ability
+        p.classList.add("ability")
+        abilityList.push(p)
+    }
+    
+    delete item["ability"]
+    delete item["cost"]
+    delete item["item-group"]
+    delete item["ID"]
+    delete item["image"]
+    delete item["name"]
+    
+    Object.keys(item).sort().forEach(key=>{ // display each stat other than cost and abilities in alphabetical order
+        if (item[key] === 0) return;
+
+        p = document.createElement("p")
+        p.innerHTML = statNameTranslation[key]+": "
+        span = document.createElement("span") // add the values to a <span> to display them differently
+        span.innerHTML = item[key]
+        if (percentStats.includes(key)) { // if stat is a percent stat, add percent to the end
+            span.innerHTML += "%"
+        }
+        p.appendChild(span)
+        hoverStats.appendChild(p)
+    })
+
+    abilityList.forEach(p => { // display abilities
+        hoverStats.appendChild(p)
+    })
 }
