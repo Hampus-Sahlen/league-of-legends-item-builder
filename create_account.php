@@ -23,8 +23,8 @@ if (isset($_POST["username"])) { // try to create the user
             $errorMessage[] = "Email already taken";
         }
     }
-    if (!preg_match("/^[^\s]+$/", $password)){ // checks if password contains no spaces and at least 1 character
-        $errorMessage[] = "You must have a password that does not contain spaces";
+    if (!preg_match("/^.{8,}$/", $password)){ // checks if password contains at least 8 characters
+        $errorMessage[] = "Your password must be at least 8 characters long";
     }
     if ($password !== $passwordRepeat){
         $errorMessage[] = "Your passwords do not match";
