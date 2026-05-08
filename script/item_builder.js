@@ -194,7 +194,7 @@ function updateStatView() {
     // console.info("Updating stats")
 
     // combine stats for displaying
-    finishedStats = new Object
+    const finishedStats = new Object
     finishedStats.abilities = new Array
     finishedStats.groups = new Array
 
@@ -208,14 +208,17 @@ function updateStatView() {
         finishedStats.groups.push(item["item-group"]) // use in the future to identify if multiple items from the same group exist
         
         // remove unstackable or undesired attributes
-        delete item["ability"]
-        delete item["item-group"]
-        delete item["index"]
-        delete item["image"]
-        delete item["name"]
-        delete item["ID"]
+        let ignoredKeys = new Set([
+            "ability",
+            "item-group",
+            "index",
+            "image",
+            "name",
+            "ID"
+        ])
     
         Object.keys(item).forEach(key=>{
+            if (ignoredKeys.has(key)) return
             if (typeof finishedStats[key] !== 'undefined') {
                 finishedStats[key] += parseInt(item[key])
             }
@@ -231,7 +234,7 @@ function updateStatView() {
     if (typeof finishedStats.cost === 'undefined') {
         finishedStats.cost = 0
     }
-    p = document.createElement("p")
+    let p = document.createElement("p")
     p.innerHTML = "Total cost: <span>" + finishedStats.cost + "</span>" // display total cost
     itemStats.appendChild(p)
 
@@ -246,15 +249,16 @@ function updateStatView() {
         }
     })
 
+    const ignoredKeys = new Set([
+        "abilities", 
+        "cost", 
+        "groups"
+    ])
 
-    delete finishedStats["abilities"]
-    delete finishedStats["cost"]
-    delete finishedStats["groups"]
-    
     Object.keys(finishedStats).sort().forEach(key=>{ // display each stat other than cost and abilities in alphabetical order
-        if (finishedStats[key] === 0) return;
+        if (finishedStats[key] === 0 || ignoredKeys.has(key)) return;
 
-        p = document.createElement("p")
+        let p = document.createElement("p")
         p.innerHTML = statNameTranslation[key]+": "
         span = document.createElement("span") // add the values to a <span> to display them differently
         span.innerHTML = finishedStats[key]
@@ -326,15 +330,17 @@ function showStatsOfItem(e) {
         abilityList.push(p)
     }
     
-    delete item["ability"]
-    delete item["cost"]
-    delete item["item-group"]
-    delete item["ID"]
-    delete item["image"]
-    delete item["name"]
+    const ignoredKeys = new Set([
+        "ability",
+        "cost",
+        "item-group",
+        "ID",
+        "image",
+        "name"
+    ])
     
     Object.keys(item).sort().forEach(key=>{ // display each stat other than cost and abilities in alphabetical order
-        if (item[key] === 0) return;
+        if (item[key] === 0 || ignoredKeys.has(key)) return;
 
         p = document.createElement("p")
         p.innerHTML = statNameTranslation[key]+": "
