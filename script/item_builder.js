@@ -361,16 +361,14 @@ function moveItemStatsDisplay(e) {
 
     const rect = hoveredItem.getBoundingClientRect()
     if ((e.clientX >= rect.left && e.clientX <= rect.right) && (e.clientY >= rect.top && e.clientY <= rect.bottom)) { // if cursor is above the item
-        // redo this and make it use the position it would be at if it wasnt offset last frame
+        let offsetY = 0
+        const statBoxRect = hoverStatsContainer.getBoundingClientRect()
+        if (e.clientY + statBoxRect.height > window.innerHeight) { // if bottom of the box is below the bottom of the window
+            offsetY = e.clientY + statBoxRect.height - window.innerHeight // returns the amount of pixels the bottom of the box would be below the bottom of the window
+        }
 
-        // let offsetY = 0
-        // const statBoxRect = hoverStatsContainer.getBoundingClientRect()
-        // if (statBoxRect.bottom > window.innerHeight) { // if bottom of the box is below the bottom of the window
-        //     offsetY = statBoxRect.bottom - window.innerHeight + parseInt(hoverStatsContainer.dataset["offsetY"]) // returns the amount of pixels the bottom of the box would be below the bottom of the window
-        //     console.log(Math.round(statBoxRect.bottom), window.innerHeight, Math.round(offsetY))
-        // }
-        hoverStatsContainer.style.left = (e.clientX + window.scrollX) + "px"
-        hoverStatsContainer.style.top = (e.clientY + window.scrollY/* - offsetY */) + "px"
+        hoverStatsContainer.style.left = (e.clientX + window.scrollX + 5) + "px"
+        hoverStatsContainer.style.top = (e.clientY + window.scrollY - offsetY) + "px"
     }
     else {
         hoverStatsContainer.style.display = ""

@@ -157,7 +157,10 @@ body {
 }
 
 #hover-stats-container {
+    pointer-events: none;
     position: absolute;
     display: none;
     width: 400px;
+    height: max-content;
+    min-height: auto;
 }
