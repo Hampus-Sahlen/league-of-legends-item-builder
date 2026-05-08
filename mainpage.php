@@ -30,7 +30,7 @@ if (!empty($_SESSION["UUID"])) {
     <script src="script/item_builder.js" defer></script>
 </head>
 <body>
-    <div id="importDiv" style="display: none;">
+    <code id="importDiv" style="display: none;">
     <?php while ($item = $items -> fetch_assoc()): ?>
         <div>
         <?php foreach ($item as $key => $val): if ($val !== null): ?>
@@ -41,7 +41,7 @@ if (!empty($_SESSION["UUID"])) {
         <?php endif; endforeach ?>
         </div>
     <?php endwhile ?>
-    </div>
+        </code>
 
     <header class="top-nav">
         <?php if (!empty($userInfo)): ?>
