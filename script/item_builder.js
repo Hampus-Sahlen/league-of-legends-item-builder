@@ -1,6 +1,8 @@
 const importDiv = document.querySelector("#importDiv")
 const itemStorage = document.querySelector("#itemStorage")
+const storageContainer = document.querySelector("#storage-container")
 const itemInventory = document.querySelector("#itemInventory")
+const inventoryContainer = document.querySelector("#inventory-container")
 const itemStats = document.querySelector("#itemStats")
 let dragObjects = new Array
 let items = new Array
@@ -150,7 +152,7 @@ function stopDraggingObjects(e) {
             // creates hitbox for itemContainer, checks if mouse is inside hitbox
             if ((e.clientX >= rect.left && e.clientX <= rect.right) && (e.clientY >= rect.top && e.clientY <= rect.bottom)) {
                 // item was dropped on the container
-                console.info("dropped on", container)
+                // console.info("dropped on", container)
                 if (container === itemInventory) {
                     let hasSlot = false
                     for (let i = 0; i < itemInventory.children.length; i++) {
@@ -160,16 +162,17 @@ function stopDraggingObjects(e) {
                         }
                     }
                     if (hasSlot) {
-                        console.info("reassigning", element, "to", container)
+                        // console.info("reassigning", element, "to", container)
                         container.appendChild(element);
                         updateStatView() // update the stats displayed
                         refreshSlots()
-                    } else {
-                        console.info("itemInventory already has 6 items")
-                    }
+                    } 
+                    // else {
+                    //     console.info("itemInventory already has 6 items")
+                    // }
                 } 
                 else {
-                console.info("reassigning", element, "to", container)
+                // console.info("reassigning", element, "to", container)
                 container.appendChild(element);
                 updateStatView() // update the stats displayed
                 refreshSlots()
@@ -181,7 +184,7 @@ function stopDraggingObjects(e) {
 }
 
 function updateStatView() {
-    console.info("Updating stats")
+    // console.info("Updating stats")
 
     // combine stats for displaying
     finishedStats = new Object
@@ -279,6 +282,6 @@ function refreshSlots() {
         const slot = document.createElement("div")
         slot.classList.add("slot")
         itemInventory.appendChild(slot)
-        console.log("Added slot")
+        // console.log("Added slot")
     }
 }
