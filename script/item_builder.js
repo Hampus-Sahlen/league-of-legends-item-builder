@@ -140,6 +140,8 @@ function stopDraggingObjects(e) {
         element.style.position = ""
         // assign item to a new container if dropped on one 
         document.querySelectorAll(".js-itemContainer").forEach(container => {
+            if (container === element.parentNode) return
+
             let rect = container.getBoundingClientRect()
             switch (container) { // may set hitbox to something larger than container
                 case itemInventory:
