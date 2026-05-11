@@ -250,7 +250,10 @@ function updateStatView() {
         finishedStats.cost = 0
     }
     let p = document.createElement("p")
-    p.innerHTML = "Total cost: <span>" + finishedStats.cost + "</span>" // display total cost
+    p.innerText = "Total cost:" // display total cost
+    let span = document.createElement("span")
+    span.innerText =  finishedStats.cost
+    p.appendChild(span)
     itemStats.appendChild(p)
 
 
@@ -258,7 +261,7 @@ function updateStatView() {
     finishedStats.abilities.forEach(ability=>{ // compile abilities
         if (typeof ability !== 'undefined') {
             p = document.createElement("p")
-            p.innerHTML = ability
+            p.innerText = ability
             p.classList.add("ability")
             abilityList.push(p)
         }
@@ -274,11 +277,11 @@ function updateStatView() {
         if (finishedStats[key] === 0 || ignoredKeys.has(key)) return;
 
         let p = document.createElement("p")
-        p.innerHTML = statNameTranslation[key]+": "
+        p.innerText = statNameTranslation[key]+": "
         span = document.createElement("span") // add the values to a <span> to display them differently
-        span.innerHTML = finishedStats[key]
+        span.innerText = finishedStats[key]
         if (percentStats.includes(key)) { // if stat is a percent stat, add percent to the end
-            span.innerHTML += "%"
+            span.innerText += "%"
         }
         p.appendChild(span)
         itemStats.appendChild(p)
@@ -324,7 +327,7 @@ function showStatsOfItem(e) {
     // display stats
     let item = structuredClone(items[this.dataset["index"]])
     
-    hoverStatsTitle.innerHTML = item["name"]
+    hoverStatsTitle.innerText = item["name"]
 
     hoverStats.innerHTML = ""
 
@@ -332,7 +335,10 @@ function showStatsOfItem(e) {
         item.cost = 0
     }
     p = document.createElement("p")
-    p.innerHTML = "Cost: <span>" + item.cost + "</span>" // display total cost
+    p.innerText = "Cost:" // display total cost
+    let span = document.createElement("span")
+    span.innerText =  item.cost
+    p.appendChild(span)
     hoverStats.appendChild(p)
 
 
@@ -340,7 +346,7 @@ function showStatsOfItem(e) {
     // compile abilities
     if (typeof item.ability !== 'undefined') {
         p = document.createElement("p")
-        p.innerHTML = item.ability
+        p.innerText = item.ability
         p.classList.add("ability")
         abilityList.push(p)
     }
@@ -358,11 +364,11 @@ function showStatsOfItem(e) {
         if (item[key] === 0 || ignoredKeys.has(key)) return;
 
         p = document.createElement("p")
-        p.innerHTML = statNameTranslation[key]+": "
+        p.innerText = statNameTranslation[key]+": "
         span = document.createElement("span") // add the values to a <span> to display them differently
-        span.innerHTML = item[key]
+        span.innerText = item[key]
         if (percentStats.includes(key)) { // if stat is a percent stat, add percent to the end
-            span.innerHTML += "%"
+            span.innerText += "%"
         }
         p.appendChild(span)
         hoverStats.appendChild(p)
