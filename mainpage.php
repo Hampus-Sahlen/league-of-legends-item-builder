@@ -35,17 +35,17 @@ if (!empty($_SESSION["UUID"])) {
         <div>
         <?php foreach ($item as $key => $val): if ($val !== null): ?>
             <div>
-                <p><?php echo $key; ?></p>
-                <p><?php echo $val; ?></p>
+                <p><?php echo es($key); ?></p>
+                <p><?php echo es($val); ?></p>
             </div>
         <?php endif; endforeach ?>
         </div>
     <?php endwhile ?>
-        </code>
+    </code>
 
     <header class="top-nav">
         <?php if (!empty($userInfo)): ?>
-        <h1><?php echo $userInfo["username"] ?></h1>
+        <h1><?php echo es($userInfo["username"]) ?></h1>
         <a href="login.php?logout=true" class="logout-btn">Log out</a>
         <?php if ($_SESSION["accessLevel"] === 1) {echo '<a href="./admin/" class="logout-btn">Admin page</a>';}?>
         <?php else: ?>
