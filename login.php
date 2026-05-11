@@ -75,7 +75,7 @@ if (isset($_POST["email"])) { // try to login the user
     <link rel="stylesheet" href="style/auth.css">
 </head>
 <body>
-    <header>
+    <header <?php if (empty($errorMessage) && empty($successMessage)) echo 'style="display:none;"' ?>>
         <div id="error-message" class="error">
             <?php echo $errorMessage ?>
         </div>

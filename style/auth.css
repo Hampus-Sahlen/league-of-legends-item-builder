@@ -121,6 +121,9 @@ form a:hover {
     margin-bottom: 10px;
     font-weight: bold;
 }
+.error p {
+    margin: 10px 0;
+}
 
 .success {
     color: #00ff9d;

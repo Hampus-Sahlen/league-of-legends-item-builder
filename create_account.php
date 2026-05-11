@@ -23,8 +23,17 @@ if (isset($_POST["username"])) { // try to create the user
             $errorMessage[] = "Email already taken";
         }
     }
-    if (!preg_match("/^.{8,}$/", $password)){ // checks if password contains at least 8 characters
-        $errorMessage[] = "Your password must be at least 8 characters long";
+    /* 
+    IF-statement from top to bottom: 
+    if password DOES NOT contains at least 8 characters
+    OR if password DOES NOT contains at least 1 number
+    OR if password DOES NOT contains at least 1 special character
+    */
+    if (!preg_match("/^.{8,}$/", $password)
+        || !preg_match("/[\d]+/", $password)
+        || !preg_match("/[^\w\s]+/", $password)
+        ){
+        $errorMessage[] = "Your password must be at least 8 characters long, contain at least one number and one special character";
     }
     if ($password !== $passwordRepeat){
         $errorMessage[] = "Your passwords do not match";
@@ -60,7 +69,7 @@ if (isset($_POST["username"])) { // try to create the user
     <link rel="stylesheet" href="style/auth.css">
 </head>
 <body>
-    <header>
+    <header <?php if (empty($errorMessage)) echo 'style="display:none;"' ?>>
         <div id="error-message" class="error">
             <?php foreach ($errorMessage as $error): ?>
             <p><?php echo $error ?></p>
