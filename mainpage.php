@@ -28,6 +28,11 @@ if (!empty($_SESSION["UUID"])) {
     <title>League Item Builder</title>
     <link rel="stylesheet" href="style/mainpage.css">
     <script src="script/item_builder.js" defer></script>
+    <noscript>
+        <code style="background-color: red;">
+            This page requires javascript to be enabled
+        </code>
+    </noscript>
 </head>
 <body>
     <code id="importDiv" style="display: none;">
