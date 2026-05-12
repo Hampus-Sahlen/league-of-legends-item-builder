@@ -223,7 +223,7 @@ function updateStatView() {
         finishedStats.groups.push(item["item-group"]) // use in the future to identify if multiple items from the same group exist
         
         // remove unstackable or undesired attributes
-        let ignoredKeys = new Set([
+        const ignoredKeys = new Set([
             "ability",
             "item-group",
             "index",
@@ -249,23 +249,15 @@ function updateStatView() {
     if (typeof finishedStats.cost === 'undefined') {
         finishedStats.cost = 0
     }
-    let p = document.createElement("p")
+    p = document.createElement("p")
     p.innerText = "Total cost:" // display total cost
-    let span = document.createElement("span")
+    span = document.createElement("span")
     span.innerText =  finishedStats.cost
     p.appendChild(span)
     itemStats.appendChild(p)
+    delete p
+    delete span
 
-
-    let abilityList = [] // temporaraly store abilities to display them at the bottom of the list 
-    finishedStats.abilities.forEach(ability=>{ // compile abilities
-        if (typeof ability !== 'undefined') {
-            p = document.createElement("p")
-            p.innerText = ability
-            p.classList.add("ability")
-            abilityList.push(p)
-        }
-    })
 
     const ignoredKeys = new Set([
         "abilities", 
@@ -276,9 +268,9 @@ function updateStatView() {
     Object.keys(finishedStats).sort().forEach(key=>{ // display each stat other than cost and abilities in alphabetical order
         if (finishedStats[key] === 0 || ignoredKeys.has(key)) return;
 
-        let p = document.createElement("p")
+        const p = document.createElement("p")
         p.innerText = statNameTranslation[key]+": "
-        span = document.createElement("span") // add the values to a <span> to display them differently
+        const span = document.createElement("span") // add the values to a <span> to display them differently
         span.innerText = finishedStats[key]
         if (percentStats.includes(key)) { // if stat is a percent stat, add percent to the end
             span.innerText += "%"
@@ -287,8 +279,13 @@ function updateStatView() {
         itemStats.appendChild(p)
     })
 
-    abilityList.forEach(p => { // display abilities
-        itemStats.appendChild(p)
+    finishedStats.abilities.forEach(ability=>{ // compile abilities
+        if (typeof ability !== 'undefined') {
+            const p = document.createElement("p")
+            p.innerText = ability
+            p.classList.add("ability")
+            itemStats.appendChild(p)
+        }
     })
 }
 
@@ -336,20 +333,12 @@ function showStatsOfItem(e) {
     }
     p = document.createElement("p")
     p.innerText = "Cost:" // display total cost
-    let span = document.createElement("span")
+    span = document.createElement("span")
     span.innerText =  item.cost
     p.appendChild(span)
     hoverStats.appendChild(p)
-
-
-    let abilityList = [] // temporaraly store abilities to display them at the bottom of the list 
-    // compile abilities
-    if (typeof item.ability !== 'undefined') {
-        p = document.createElement("p")
-        p.innerText = item.ability
-        p.classList.add("ability")
-        abilityList.push(p)
-    }
+    delete p
+    delete span
     
     const ignoredKeys = new Set([
         "ability",
@@ -363,9 +352,9 @@ function showStatsOfItem(e) {
     Object.keys(item).sort().forEach(key=>{ // display each stat other than cost and abilities in alphabetical order
         if (item[key] === 0 || ignoredKeys.has(key)) return;
 
-        p = document.createElement("p")
+        const p = document.createElement("p")
         p.innerText = statNameTranslation[key]+": "
-        span = document.createElement("span") // add the values to a <span> to display them differently
+        const span = document.createElement("span") // add the values to a <span> to display them differently
         span.innerText = item[key]
         if (percentStats.includes(key)) { // if stat is a percent stat, add percent to the end
             span.innerText += "%"
@@ -374,9 +363,12 @@ function showStatsOfItem(e) {
         hoverStats.appendChild(p)
     })
 
-    abilityList.forEach(p => { // display abilities
+    if (typeof item.ability !== 'undefined') {
+        const p = document.createElement("p")
+        p.innerText = item.ability
+        p.classList.add("ability")
         hoverStats.appendChild(p)
-    })
+    }
 }
 
 function moveItemStatsDisplay(e) {
