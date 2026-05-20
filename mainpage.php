@@ -61,6 +61,7 @@ if (!empty($_SESSION["UUID"])) {
     <main class="builder-container">
 
         <div id="storage-container" class="panel storage">
+            <p style="text-align:center;margin-bottom:10px;">Press and hold to drag the items</p>
             <h2>Item Shop</h2>
             <div id="itemStorage" class="item-grid"></div>
         </div>
