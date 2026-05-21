@@ -50,9 +50,9 @@ if (!empty($_SESSION["UUID"])) {
 
     <header class="top-nav">
         <?php if (!empty($userInfo)): ?>
-        <h1><?php echo es($userInfo["username"]) ?></h1>
-        <a href="login.php?logout=true" class="logout-btn">Log out</a>
-        <?php if ($_SESSION["accessLevel"] === 1) {echo '<a href="./admin/" class="logout-btn">Admin page</a>';}?>
+            <a href="login.php?logout=true" class="logout-btn">Log out</a>
+            <?php if ($_SESSION["accessLevel"] === 1) {echo '<a href="./admin/" class="logout-btn">Admin page</a>';}?>
+            <h1><?php echo es($userInfo["username"]) ?></h1>
         <?php else: ?>
         <a href="login.php" class="logout-btn">Log in</a>
         <?php endif ?>
