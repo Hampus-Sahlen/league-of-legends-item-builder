@@ -45,7 +45,7 @@ if (!empty($_SESSION["UUID"])) {
             Plan your path to victory. Drag and drop items to test combinations and calculate your ultimate League of Legends build.
         </p>
 
-        <a href="mainpage.php" class="cta-button">Click here to view builder</a>
+        <a href="mainpage.php" class="cta-button">Click here to open builder</a>
     </main>
 </body>
 
