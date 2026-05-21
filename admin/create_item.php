@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($_POST['selected_groups']) && is_array($_POST['selected_groups'])) {
             $count = 0;
             foreach ($_POST['selected_groups'] as $groupId) {
-                if ($count < 3) {
+                if ($count < 22) {
                     // Using `item-ID` and `group-ID` according to your database structure
                     $dbObject->write("INSERT INTO `item-group` (`item-ID`, `group-ID`) VALUES (?, ?)", [$newId, $groupId]);
                     $count++;
@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <label>Name:</label><br>
             <input type="text" name="name" required><br><br>
             
-            <label>Ability (Description):</label><br>
+            <label>Ability:</label><br>
             <textarea name="ability" rows="4" placeholder="Describe the item's passive/active ability..."></textarea><br><br>
 
             <label>Image:</label><br>
@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
 
         <div class="form-section">
-            <h3>Select Groups (Max 3)</h3>
+            <h3>Select Item Groups</h3>
             <div class="group-list">
                 <?php foreach ($allGroups as $g): ?>
                     <label style="display: block; cursor: pointer;">

@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         
         // Add new connections
         if (isset($_POST['selected_groups']) && is_array($_POST['selected_groups'])) {
-            $selected = array_slice($_POST['selected_groups'], 0, 3);
+            $selected = array_slice($_POST['selected_groups'], 0, 22);
             foreach ($selected as $groupId) {
                 $dbObject->write("INSERT INTO `item-group` (`item-ID`, `group-ID`) VALUES (?, ?)", [$id, $groupId]);
             }
@@ -118,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
 
         <div class="form-section">
-            <h3>Groups (Select up to 3)</h3>
+            <h3>Item Groups</h3>
             <div style="height: 150px; overflow-y: auto; border: 1px solid #5b5a56; padding: 10px;">
                 <?php foreach ($allGroups as $g): ?>
                     <?php $checked = in_array($g['ID'], $currentGroupIDs) ? "checked" : ""; ?>
