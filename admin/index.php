@@ -10,7 +10,7 @@ $items = $dbObject->query("SELECT ID, name, cost, image FROM item ORDER BY name 
     <title>League of Legends Items</title>
     <style>
         body { font-family: sans-serif; background: #010a13; color: #f0e6d2; padding: 40px; }
-        .item-card { border: 1px solid #c89b3c; padding: 15px 0px; margin: 10px; display: inline-block; width: 200px; text-align: center; background: #1e2328; }
+        .item-card { border: 2px solid #c89b3c; padding: 15px 0px; margin: 10px; display: inline-block; width: 200px; text-align: center; background: #1e2328; }
         .item-image { width: 64px; height: 64px; display: block; margin: 0 auto 10px; border: 1px solid #5b5a56; }
         .btn-edit { color: #00bcff; text-decoration: none; font-size: 1em; border: 2px solid #00bcff; padding: 3px 6px; }
         .btn-create { background: #c89b3c; color: black; padding: 10px 20px; text-decoration: none; font-weight: bold; }
@@ -34,6 +34,6 @@ $items = $dbObject->query("SELECT ID, name, cost, image FROM item ORDER BY name 
             </div>
         <?php endforeach; ?>
     </div>
-            <a href="../login.php" class="btn-creatine">LOG OUT</a>
+            <a href="../login.php" class="btn-creatine">Back To Item Builder</a>
 </body>
 </html>
