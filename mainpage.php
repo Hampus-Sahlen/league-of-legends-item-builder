@@ -2,9 +2,17 @@
 require_once "helpers/init.php";
 
 $items = $dbObject -> query_nofetch(
-    "SELECT * 
+    "SELECT *,
+        group.ID AS groupID,
+        group.name AS groupName
     FROM item
+    JOIN `item-group` ON item.ID = `item-group`.`item-ID`
+    JOIN group ON `item-group`.`group-ID` = group.ID
 ");
+
+// foreach ($items as $key => $item) {
+
+// }
 
 $userInfo = null;
 if (!empty($_SESSION["UUID"])) {
@@ -15,6 +23,9 @@ if (!empty($_SESSION["UUID"])) {
         [$_SESSION["UUID"]]
     )[0];
 }
+
+
+
 
 ?>
 
