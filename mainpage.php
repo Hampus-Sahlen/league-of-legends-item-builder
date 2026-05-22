@@ -2,9 +2,27 @@
 require_once "helpers/init.php";
 
 $items = $dbObject -> query_nofetch(
-    "SELECT * 
-    FROM item
+    "SELECT *
+    FROM `item`
 ");
+
+$groups_tmp = $dbObject -> query(
+    "SELECT *
+    FROM `group`
+    JOIN `item-group` ON `group-ID` = `ID`
+");
+
+// debugPrint($groups_tmp);
+
+$groups = [];
+foreach ($groups_tmp as $group) {
+    // debugPrint($group);
+    if (empty($groups[$group["item-ID"]])) {
+        $groups[$group["item-ID"]] = [];
+    }
+    $groups[$group["item-ID"]][] = $group["name"];
+}
+
 
 $userInfo = null;
 if (!empty($_SESSION["UUID"])) {
@@ -15,6 +33,9 @@ if (!empty($_SESSION["UUID"])) {
         [$_SESSION["UUID"]]
     )[0];
 }
+
+
+
 
 ?>
 
@@ -43,7 +64,15 @@ if (!empty($_SESSION["UUID"])) {
                 <p><?php echo es($key); ?></p>
                 <p><?php echo es($val); ?></p>
             </div>
-        <?php endif; endforeach ?>
+        <?php endif; endforeach; ?>
+        <?php if (!empty($groups[$item["ID"]])): ?>
+            <div>
+                <p>__groups__</p>
+                <?php foreach ($groups[$item["ID"]] as $group): ?>
+                <p><?php echo es($group) ?></p>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
         </div>
     <?php endwhile ?>
     </code>
