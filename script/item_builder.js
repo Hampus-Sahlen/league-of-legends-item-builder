@@ -10,6 +10,7 @@ const hoverStatsContainer = document.querySelector("#hover-stats-container")
 let dragObjects = new Array
 let items = new Array
 let hoveredItem
+let activeGroups = new Array
 
 const statNameTranslation = { // translate db names into human readable names
     "health": "Health",
@@ -77,14 +78,24 @@ function importItems() {
     for (let i = 0; i < importDiv.children.length; i++) {
         const item = importDiv.children[i];
         
-        let tempArr = new Object
-
+        let tempObj = new Object
+        
         for (let i = 0; i < item.children.length; i++) {
             const stat = item.children[i];
-            tempArr[stat.children[0].innerHTML] = stat.children[1].innerHTML // key = value
+            tempObj["groups"] = new Array
+            if (stat.children[0].innerHTML === "__groups__") { // groups are saved in an array, need special handling
+
+                for (let index = 1; index < stat.children.length; index++) { // start on index 1 to avoid "__groups__"
+                    const group = stat.children[index].innerText;
+                    tempObj["groups"].push(group)
+                }
+            } else { // handle all other stats
+                tempObj[stat.children[0].innerHTML] = stat.children[1].innerHTML // key = value
+            }
+
         }
 
-        items.push(tempArr)
+        items.push(tempObj)
     }
 
     // sort items in alpabetical order based on item name
@@ -173,7 +184,7 @@ function stopDraggingObjects(e) {
             if ((e.clientX >= rect.left && e.clientX <= rect.right) && (e.clientY >= rect.top && e.clientY <= rect.bottom)) {
                 // item was dropped on the container
                 // console.info("dropped on", container)
-                if (container === itemInventory) {
+                if (container === itemInventory) { // can be a switch
                     let hasSlot = false
                     for (let i = 0; i < itemInventory.children.length; i++) {
                         const slot = itemInventory.children[i];
@@ -183,14 +194,22 @@ function stopDraggingObjects(e) {
                     }
                     if (hasSlot) {
                         // console.info("reassigning", element, "to", container)
+                        thisItem = items[parseInt(element.dataset["index"])]
+                        console.log(thisItem)
+                        let groupDupeCheck = false
+                        thisItem.groups.forEach(element => {
+                            if (activeGroups.includes(element)) {
+                                alert("This item is part of a group that you already have.\nYou can only have one item of each group.")
+                                groupDupeCheck = true
+                            }
+                        });
+                        if (groupDupeCheck) return;
                         container.appendChild(element);
                         updateStatView() // update the stats displayed
                         refreshSlots()
                         sortStorage(itemStorage)
                     } 
-                    // else {
-                    //     console.info("itemInventory already has 6 items")
-                    // }
+
                 } 
                 else {
                 // console.info("reassigning", element, "to", container)
@@ -220,12 +239,12 @@ function updateStatView() {
         let item = items[itemInventory.children[i].dataset["index"]];
         item = structuredClone(item) // edit item without modifying the stored item
         finishedStats.abilities.push(item["ability"])
-        finishedStats.groups.push(item["item-group"]) // use in the future to identify if multiple items from the same group exist
-        
+        finishedStats.groups = finishedStats.groups.concat(item.groups)
+
         // remove unstackable or undesired attributes
         const ignoredKeys = new Set([
             "ability",
-            "item-group",
+            "groups",
             "index",
             "image",
             "name",
@@ -243,7 +262,9 @@ function updateStatView() {
         })
     }
 
+
     // display stats
+    activeGroups = finishedStats.groups // does not matter that it is a reference
     itemStats.innerHTML = ""
     
     if (typeof finishedStats.cost === 'undefined') {
@@ -278,6 +299,19 @@ function updateStatView() {
         p.appendChild(span)
         itemStats.appendChild(p)
     })
+
+    if (finishedStats.groups.length > 0) {
+        const p = document.createElement("p")
+        p.innerText = "Item Groups:"
+        const span = document.createElement("span") // add the values to a <span> to display them differently
+        let spanText = ""
+        finishedStats.groups.forEach(element => {
+            spanText += element + "\n"
+        });
+        span.innerText = spanText.trim()
+        p.appendChild(span)
+        itemStats.appendChild(p)
+    }
 
     finishedStats.abilities.forEach(ability=>{ // compile abilities
         if (typeof ability !== 'undefined') {
@@ -315,7 +349,7 @@ function refreshSlots() {
 function showStatsOfItem(e) {
     if (this.classList.contains("js-dragObject")) return // do not show stats on a dragged object
 
-    hoveredItem = this
+    hoveredItem = this // i believe this is unnecessary, but i dont dare to touch it
     document.addEventListener("mousemove", moveItemStatsDisplay) // move stat display with the mouse, and remove it if mouse isnt on stat display or this item
     // position info box
     hoverStatsContainer.style.display = "block"
@@ -343,7 +377,7 @@ function showStatsOfItem(e) {
     const ignoredKeys = new Set([
         "ability",
         "cost",
-        "item-group",
+        "groups",
         "ID",
         "image",
         "name"
@@ -362,6 +396,19 @@ function showStatsOfItem(e) {
         p.appendChild(span)
         hoverStats.appendChild(p)
     })
+
+    if (item.groups.length > 0) {
+        const p = document.createElement("p")
+        p.innerText = "Item Groups:"
+        const span = document.createElement("span") // add the values to a <span> to display them differently
+        let spanText = ""
+        item.groups.forEach(element => {
+            spanText += element + "\n"
+        });
+        span.innerText = spanText.trim()
+        p.appendChild(span)
+        hoverStats.appendChild(p)
+    }
 
     if (typeof item.ability !== 'undefined') {
         const p = document.createElement("p")
