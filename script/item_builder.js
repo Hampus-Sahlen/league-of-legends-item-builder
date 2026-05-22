@@ -195,7 +195,6 @@ function stopDraggingObjects(e) {
                     if (hasSlot) {
                         // console.info("reassigning", element, "to", container)
                         thisItem = items[parseInt(element.dataset["index"])]
-                        console.log(thisItem)
                         let groupDupeCheck = false
                         thisItem.groups.forEach(element => {
                             if (activeGroups.includes(element)) {
