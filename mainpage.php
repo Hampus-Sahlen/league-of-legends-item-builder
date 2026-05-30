@@ -87,8 +87,7 @@ if (!empty($_SESSION["UUID"])) {
         <?php endif ?>
     </header>
 
-    <main class="builder-container">
-
+    <main id="builder-container">
         <div id="storage-container" class="panel storage">
             <p style="text-align:center;margin-bottom:10px;">Press and hold to drag the items</p>
             <h2>Item Shop</h2>
@@ -106,11 +105,14 @@ if (!empty($_SESSION["UUID"])) {
             <div id="itemStats" class="stats-list"></div>
         </div>
 
-        <div id="hover-stats-container" class="panel stats">
+        <div class="panel stats hover-container">
             <h2 id="hoverStatsTitle"></h2>
             <div id="hoverStats" class="stats-list"></div>
         </div>
-
+        
+        <div id="hover-ablilty-container" class="panel">
+            
+        </div>
     </main>
 </body>
 </html>
