@@ -56,27 +56,6 @@ if (!empty($_SESSION["UUID"])) {
     </noscript>
 </head>
 <body>
-    <code id="importDiv" style="display: none;">
-    <?php while ($item = $items -> fetch_assoc()): ?>
-        <div>
-        <?php foreach ($item as $key => $val): if ($val !== null): ?>
-            <div>
-                <p><?php echo es($key); ?></p>
-                <p><?php echo es($val); ?></p>
-            </div>
-        <?php endif; endforeach; ?>
-        <?php if (!empty($groups[$item["ID"]])): ?>
-            <div>
-                <p>__groups__</p>
-                <?php foreach ($groups[$item["ID"]] as $group): ?>
-                <p><?php echo es($group) ?></p>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-        </div>
-    <?php endwhile ?>
-    </code>
-
     <header class="top-nav">
         <?php if (!empty($userInfo)): ?>
             <a href="login.php?logout=true" class="logout-btn">Log out</a>
@@ -105,14 +84,38 @@ if (!empty($_SESSION["UUID"])) {
             <div id="itemStats" class="stats-list"></div>
         </div>
 
-        <div class="panel stats hover-container">
+        <div id="hover-stats-container" class="panel stats hover-container">
             <h2 id="hoverStatsTitle"></h2>
             <div id="hoverStats" class="stats-list"></div>
         </div>
         
-        <div id="hover-ablilty-container" class="panel">
-            
+        <div id="hover-ability-container" class="panel stats hover-container">
+            <h2 id="hoverAbilityTitle"></h2>
+            <div id="hoverAbility" class="stats-list"></div>
         </div>
     </main>
+    
+    
+    <code id="importDiv" style="display: none;">
+    <?php while ($item = $items -> fetch_assoc()): ?>
+        <div>
+        <?php foreach ($item as $key => $val): if ($val !== null): ?>
+            <div>
+                <p><?php echo es($key); ?></p>
+                <p><?php echo es($val); ?></p>
+            </div>
+        <?php endif; endforeach; ?>
+        <?php if (!empty($groups[$item["ID"]])): ?>
+            <div>
+                <p>__groups__</p>
+                <?php foreach ($groups[$item["ID"]] as $group): ?>
+                <p><?php echo es($group) ?></p>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+        </div>
+    <?php endwhile ?>
+    </code>
+
 </body>
 </html>

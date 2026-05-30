@@ -130,6 +130,17 @@ body {
     padding-bottom: 5px;
 }
 
+.stats-list h3 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    color: #cda642;
+    text-decoration: underline;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #2a2a2a;
+    padding-bottom: 5px;
+}
+
 .stats-list span {
     color: #00ff9d;
     font-weight: bold;

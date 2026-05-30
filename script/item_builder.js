@@ -1,12 +1,21 @@
 const importDiv = document.querySelector("#importDiv")
-const itemStorage = document.querySelector("#itemStorage")
+
 const storageContainer = document.querySelector("#storage-container")
-const itemInventory = document.querySelector("#itemInventory")
+const itemStorage = document.querySelector("#itemStorage")
+
 const inventoryContainer = document.querySelector("#inventory-container")
+const itemInventory = document.querySelector("#itemInventory")
+
 const itemStats = document.querySelector("#itemStats")
-const hoverStats = document.querySelector("#hoverStats")
-const hoverStatsTitle = document.querySelector("#hoverStatsTitle")
+
 const hoverStatsContainer = document.querySelector("#hover-stats-container")
+const hoverStatsTitle = document.querySelector("#hoverStatsTitle")
+const hoverStats = document.querySelector("#hoverStats")
+
+const hoverAbilityContainer = document.querySelector("#hover-ability-container")
+const hoverAbilityTitle = document.querySelector("#hoverAbilityTitle")
+const hoverAbility = document.querySelector("#hoverAbility")
+
 let dragObjects = new Array
 let items = new Array
 let hoveredItem
@@ -59,7 +68,7 @@ const percentStats = [ // all stats that should have a % behind them
 document.addEventListener("DOMContentLoaded", e=>{ // setup when page loads
     importItems() // import items
     refreshSlots() // create the slots
-    updateStatView()
+    updateStatView() // add the total cost = 0 to the total stats
     
     itemInventory.classList.add("js-itemContainer")
     itemStorage.classList.add("js-itemContainer")
@@ -73,26 +82,41 @@ document.addEventListener("DOMContentLoaded", e=>{ // setup when page loads
 
 
 function importItems() {
+    /* there are better ways of doing this https://chatgpt.com/share/6a1b44dd-b194-83eb-9d47-101b3f8b2abd 
+       which essentialy is just doing all this in php and passing a json with the completed data
+       would have the benefit of easily making the page into html for designers
+    */
     importDiv.remove()
 
     for (let i = 0; i < importDiv.children.length; i++) {
         const item = importDiv.children[i];
         
         let tempObj = new Object
+        tempObj["groups"] = new Array
+        tempObj["ability"] = new Object
         
         for (let i = 0; i < item.children.length; i++) {
             const stat = item.children[i];
-            tempObj["groups"] = new Array
-            if (stat.children[0].innerHTML === "__groups__") { // groups are saved in an array, need special handling
 
-                for (let index = 1; index < stat.children.length; index++) { // start on index 1 to avoid "__groups__"
-                    const group = stat.children[index].innerText;
-                    tempObj["groups"].push(group)
-                }
-            } else { // handle all other stats
-                tempObj[stat.children[0].innerHTML] = stat.children[1].innerHTML // key = value
+            switch (stat.children[0].innerText) {
+                case "__groups__":
+                    for (let index = 1; index < stat.children.length; index++) { // start on index 1 to avoid "__groups__"
+                        const group = stat.children[index].innerText;
+                        tempObj["groups"].push(group)
+                    }
+                    break;
+                
+                case "ability":
+                    stat.children[1].innerText.split('Unique – ').filter(str => str !== "").forEach(ability => { // unique separates each ability and : separates each ability name from its description
+                        let temp = ability.split(': ') // temp = ["ability name", "ability description"]
+                        tempObj["ability"][temp[0].trim()] = temp[1].trim()
+                    });
+                    break;
+                    
+                    default:
+                        tempObj[stat.children[0].innerHTML] = stat.children[1].innerHTML // key = value
+                    break;
             }
-
         }
 
         items.push(tempObj)
@@ -144,8 +168,8 @@ function startDraggingObject(e) { // start dragging an object
     // add button release checker to object
     dragObjects = document.querySelectorAll(".js-dragObject")
 }
-
 function moveDraggedObjects(e) { // move all objects that are currently being dragged
+    e.preventDefault()
     dragObjects.forEach(element => {
         element.style.left = e.clientX - Number(element.dataset.offsetX) + "px"
         element.style.top = e.clientY - Number(element.dataset.offsetY) + "px"
@@ -156,8 +180,9 @@ function moveDraggedObjects(e) { // move all objects that are currently being dr
         }
     }
 }
-
 function stopDraggingObjects(e) {
+    e.preventDefault()
+
     // remove placeholders
     removePlaceholders()
 
@@ -223,12 +248,15 @@ function stopDraggingObjects(e) {
     dragObjects = document.querySelectorAll(".js-dragObject") // refresh dragObjects
 }
 
+
+
+
 function updateStatView() {
     // console.info("Updating stats")
 
     // combine stats for displaying
     const finishedStats = new Object
-    finishedStats.abilities = new Array
+    finishedStats.abilities = new Object
     finishedStats.groups = new Array
 
     for (let i = 0; i < itemInventory.children.length; i++) {
@@ -237,7 +265,7 @@ function updateStatView() {
         }
         let item = items[itemInventory.children[i].dataset["index"]];
         item = structuredClone(item) // edit item without modifying the stored item
-        finishedStats.abilities.push(item["ability"])
+        finishedStats.abilities = Object.assign(finishedStats.abilities, item.ability)
         finishedStats.groups = finishedStats.groups.concat(item.groups)
 
         // remove unstackable or undesired attributes
@@ -312,14 +340,13 @@ function updateStatView() {
         itemStats.appendChild(p)
     }
 
-    finishedStats.abilities.forEach(ability=>{ // compile abilities
-        if (typeof ability !== 'undefined') {
-            const p = document.createElement("p")
-            p.innerText = ability
-            p.classList.add("ability")
-            itemStats.appendChild(p)
-        }
-    })
+    for (const [title, description] of Object.entries(finishedStats.abilities)) { // reads the properties of finishedStats.abilities (aka the ability title and ability description)
+        const h3 = document.createElement("h3")
+        h3.innerText = title
+        h3.dataset.description = description
+        h3.addEventListener("mouseover", showAbilityDescription)
+        itemStats.appendChild(h3)
+    }
 }
 
 
@@ -345,10 +372,12 @@ function refreshSlots() {
     }
 }
 
-function showStatsOfItem(e) {
-    if (this.classList.contains("js-dragObject")) return // do not show stats on a dragged object
 
-    hoveredItem = this // i believe this is unnecessary, but i dont dare to touch it
+function showStatsOfItem(e) {
+    // if (this.classList.contains("js-dragObject")) return // do not show stats on a dragged object
+    if (dragObjects.length) return // do not show stats if any object is being dragged
+
+    hoveredItem = this // used in moveItemStatsDisplay
     document.addEventListener("mousemove", moveItemStatsDisplay) // move stat display with the mouse, and remove it if mouse isnt on stat display or this item
     // position info box
     hoverStatsContainer.style.display = "block"
@@ -409,14 +438,13 @@ function showStatsOfItem(e) {
         hoverStats.appendChild(p)
     }
 
-    if (typeof item.ability !== 'undefined') {
+    for (const [title, description] of Object.entries(item.ability)) { // reads the properties of item.ability (aka the ability title and ability description)
         const p = document.createElement("p")
-        p.innerText = item.ability
+        p.innerText = title + ": " + description 
         p.classList.add("ability")
         hoverStats.appendChild(p)
     }
 }
-
 function moveItemStatsDisplay(e) {
     if (hoveredItem.classList.contains("js-dragObject")) { // stop showing stats if object is being dragged
         hoverStatsContainer.style.display = ""
@@ -441,6 +469,42 @@ function moveItemStatsDisplay(e) {
     }
 }
 
+function showAbilityDescription(e) {
+    hoverAbility.innerHTML = ""
+    hoveredText = this
+    document.addEventListener("mousemove", moveAbilityDescription) // move ability display with the mouse, and remove it if mouse isnt over the text anymore
+    // position info box
+    hoverAbilityContainer.style.display = "block"
+    moveAbilityDescription(e)
+
+    hoverAbilityTitle.innerText = this.innerText
+
+    const p = document.createElement("p")
+    p.classList.add("ability")
+    p.innerText = this.dataset.description
+    hoverAbility.appendChild(p)
+}
+function moveAbilityDescription(e) {
+    const rect = hoveredText.getBoundingClientRect()
+    if ((e.clientX >= rect.left && e.clientX <= rect.right) && (e.clientY >= rect.top && e.clientY <= rect.bottom)) { // if cursor is above the item
+        let offsetX = 0
+        let offsetY = 0
+        const statBoxRect = hoverAbilityContainer.getBoundingClientRect()
+        if (e.clientY + statBoxRect.height > window.innerHeight) { // if bottom of the box is below the bottom of the window
+            offsetY = e.clientY + statBoxRect.height - window.innerHeight // returns the amount of pixels the bottom of the box would be below the bottom of the window
+        }
+        if (e.clientX + statBoxRect.width > window.innerWidth) { // if right of the box is outside the right of the window
+            offsetX = 5 + e.clientX + statBoxRect.width - window.innerWidth // returns the amount of pixels the right of the box would be outside the right of the window
+        }
+
+        hoverAbilityContainer.style.left = (e.clientX + window.scrollX + 5 - offsetX) + "px"
+        hoverAbilityContainer.style.top = (e.clientY + window.scrollY - offsetY) + "px"
+    }
+    else {
+        hoverAbilityContainer.style.display = ""
+        document.removeEventListener("mousemove", moveAbilityDescription)
+    }
+}
 
 function addPlaceholder(element) { 
     /* makes a placeholder div with dimensions identical to element, inserting it before element 
@@ -463,12 +527,12 @@ function addPlaceholder(element) {
 
     element.parentNode.insertBefore(placeholder, element)
 }
-
 function removePlaceholders() {
     document.querySelectorAll(".js-placeholder").forEach(placeholder => {
         placeholder.remove()
     })
 }
+
 
 function sortStorage(parent) {
     const sortArray = []
