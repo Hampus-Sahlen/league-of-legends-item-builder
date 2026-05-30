@@ -56,6 +56,46 @@ if (!empty($_SESSION["UUID"])) {
     </noscript>
 </head>
 <body>
+    <header class="top-nav">
+        <?php if (!empty($userInfo)): ?>
+            <a href="login.php?logout=true" class="logout-btn">Log out</a>
+            <?php if ($_SESSION["accessLevel"] === 1) {echo '<a href="./admin/" class="logout-btn">Admin page</a>';}?>
+            <h1><?php echo es($userInfo["username"]) ?></h1>
+        <?php else: ?>
+        <a href="login.php" class="logout-btn">Log in</a>
+        <?php endif ?>
+    </header>
+
+    <main id="builder-container">
+        <div id="storage-container" class="panel storage">
+            <p style="text-align:center;margin-bottom:10px;">Press and hold to drag the items</p>
+            <h2>Item Shop</h2>
+            <div id="itemStorage" class="item-grid"></div>
+        </div>
+
+        <div id="inventory-container" class="panel inventory">
+            <h2>Your Build</h2>
+            <div id="itemInventory" class="inventory-grid">
+            </div>
+        </div>
+
+        <div id="stats-container" class="panel stats">
+            <h2>Total Stats</h2>
+            <div id="itemStats" class="stats-list"></div>
+        </div>
+
+        <div id="hover-stats-container" class="panel stats hover-container">
+            <h2 id="hoverStatsTitle"></h2>
+            <div id="hoverStats" class="stats-list"></div>
+        </div>
+        
+        <div id="hover-ability-container" class="panel stats hover-container">
+            <h2 id="hoverAbilityTitle"></h2>
+            <div id="hoverAbility" class="stats-list"></div>
+        </div>
+    </main>
+    
+    
     <code id="importDiv" style="display: none;">
     <?php while ($item = $items -> fetch_assoc()): ?>
         <div>
@@ -77,40 +117,5 @@ if (!empty($_SESSION["UUID"])) {
     <?php endwhile ?>
     </code>
 
-    <header class="top-nav">
-        <?php if (!empty($userInfo)): ?>
-            <a href="login.php?logout=true" class="logout-btn">Log out</a>
-            <?php if ($_SESSION["accessLevel"] === 1) {echo '<a href="./admin/" class="logout-btn">Admin page</a>';}?>
-            <h1><?php echo es($userInfo["username"]) ?></h1>
-        <?php else: ?>
-        <a href="login.php" class="logout-btn">Log in</a>
-        <?php endif ?>
-    </header>
-
-    <main class="builder-container">
-
-        <div id="storage-container" class="panel storage">
-            <p style="text-align:center;margin-bottom:10px;">Press and hold to drag the items</p>
-            <h2>Item Shop</h2>
-            <div id="itemStorage" class="item-grid"></div>
-        </div>
-
-        <div id="inventory-container" class="panel inventory">
-            <h2>Your Build</h2>
-            <div id="itemInventory" class="inventory-grid">
-            </div>
-        </div>
-
-        <div id="stats-container" class="panel stats">
-            <h2>Total Stats</h2>
-            <div id="itemStats" class="stats-list"></div>
-        </div>
-
-        <div id="hover-stats-container" class="panel stats">
-            <h2 id="hoverStatsTitle"></h2>
-            <div id="hoverStats" class="stats-list"></div>
-        </div>
-
-    </main>
 </body>
 </html>
