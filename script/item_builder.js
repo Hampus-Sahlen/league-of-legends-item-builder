@@ -17,7 +17,6 @@ const hoverAbilityTitle = document.querySelector("#hoverAbilityTitle")
 const hoverAbility = document.querySelector("#hoverAbility")
 
 let dragObjects = new Array
-let items = new Array
 let hoveredItem
 let activeGroups = new Array
 
@@ -66,7 +65,7 @@ const percentStats = [ // all stats that should have a % behind them
 
 
 document.addEventListener("DOMContentLoaded", e=>{ // setup when page loads
-    importItems() // import items
+    prepareItems() // prepare items
     refreshSlots() // create the slots
     updateStatView() // add the total cost = 0 to the total stats
     
@@ -81,50 +80,7 @@ document.addEventListener("DOMContentLoaded", e=>{ // setup when page loads
 })
 
 
-function importItems() {
-    /* there are better ways of doing this https://chatgpt.com/share/6a1b44dd-b194-83eb-9d47-101b3f8b2abd 
-       which essentialy is just doing all this in php and passing a json with the completed data
-       would have the benefit of easily making the page into html for designers
-    */
-    importDiv.remove()
-
-    for (let i = 0; i < importDiv.children.length; i++) {
-        const item = importDiv.children[i];
-        
-        let tempObj = new Object
-        tempObj["groups"] = new Array
-        tempObj["ability"] = new Object
-        
-        for (let i = 0; i < item.children.length; i++) {
-            const stat = item.children[i];
-
-            switch (stat.children[0].innerText) {
-                case "__groups__":
-                    for (let index = 1; index < stat.children.length; index++) { // start on index 1 to avoid "__groups__"
-                        const group = stat.children[index].innerText;
-                        tempObj["groups"].push(group)
-                    }
-                    break;
-                
-                case "ability":
-                    try { // try to convert the current format into 
-                        stat.children[1].innerText.split('Unique – ').filter(str => str !== "").forEach(ability => { // unique separates each ability and : separates each ability name from its description
-                            let temp = ability.split(': ') // temp = ["ability name", "ability description"]
-                            tempObj["ability"][temp[0].trim()] = temp[1].trim()
-                        });
-                    } catch (error) {
-                        tempObj["ability"]["Ability"] = stat.children[1].innerText
-                    }
-                    break;
-                    
-                default:
-                    tempObj[stat.children[0].innerHTML] = stat.children[1].innerHTML // key = value
-                    break;
-            }
-        }
-
-        items.push(tempObj)
-    }
+function prepareItems() {
 
     // sort items in alpabetical order based on item name
     items.sort((a, b) => a["name"].localeCompare(b["name"]))
