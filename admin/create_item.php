@@ -73,9 +73,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         body { font-family: sans-serif; background: #010a13; color: #f0e6d2; padding: 20px; }
         .form-section { margin-bottom: 20px; border: 1px solid #c89b3c; padding: 15px; background: #1e2328; }
         .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        input, textarea { background: #010a13; border: 1px solid #5b5a56; color: white; padding: 5px; width: 100%; box-sizing: border-box; }
+        textarea { background: #010a13; border: 1px solid #5b5a56; color: white; padding: 5px; width: 100%; box-sizing: border-box; }
+        input { background: #010a13; border: 1px solid #5b5a56; color: white; padding: 5px; box-sizing: border-box; }
+        .current-img { width: 64px; border: 1px solid #c89b3c; margin-bottom: 10px; }
         button { background: #c89b3c; color: black; padding: 10px 20px; border: none; cursor: pointer; font-weight: bold; }
-        .group-list { height: 150px; overflow-y: auto; border: 1px solid #5b5a56; padding: 10px; }
+        .status-msg { padding: 10px; margin-bottom: 20px; border: 1px solid; }
     </style>
 </head>
 <body>
@@ -101,11 +103,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div class="form-section">
             <h3>Select Item Groups</h3>
-            <div class="group-list">
+            <div style="height: 150px; overflow-y: auto; border: 1px solid #5b5a56; padding: 10px;">
                 <?php foreach ($allGroups as $g): ?>
                     <label style="display: block; cursor: pointer;">
-                        <input type="checkbox" name="selected_groups[]" value="<?php echo $g['ID']; ?>"> 
                         <?php echo es($g['name']); ?>
+                        <input type="checkbox" name="selected_groups[]" value="<?php echo $g['ID']; ?>"> 
                     </label>
                 <?php endforeach; ?>
             </div>
@@ -117,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <?php foreach ($statCols as $col): ?>
                     <div>
                         <label style="font-size: 0.8em; color: #a19d94;"><?php echo es($col); ?>:</label><br>
-                        <input type="text" name="<?php echo es($col); ?>">
+                        <input style="width: 100%;" type="text" name="<?php echo es($col); ?>">
                     </div>
                 <?php endforeach; ?>
             </div>
