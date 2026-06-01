@@ -440,7 +440,7 @@ function showStatsOfItem(e) {
 
     for (const [title, description] of Object.entries(item.ability)) { // reads the properties of item.ability (aka the ability title and ability description)
         const p = document.createElement("p")
-        p.innerText = title + ": " + description 
+        p.innerText = title + "\n" + description 
         p.classList.add("ability")
         hoverStats.appendChild(p)
     }
