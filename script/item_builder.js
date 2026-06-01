@@ -107,14 +107,18 @@ function importItems() {
                     break;
                 
                 case "ability":
-                    stat.children[1].innerText.split('Unique – ').filter(str => str !== "").forEach(ability => { // unique separates each ability and : separates each ability name from its description
-                        let temp = ability.split(': ') // temp = ["ability name", "ability description"]
-                        tempObj["ability"][temp[0].trim()] = temp[1].trim()
-                    });
+                    try { // try to convert the current format into 
+                        stat.children[1].innerText.split('Unique – ').filter(str => str !== "").forEach(ability => { // unique separates each ability and : separates each ability name from its description
+                            let temp = ability.split(': ') // temp = ["ability name", "ability description"]
+                            tempObj["ability"][temp[0].trim()] = temp[1].trim()
+                        });
+                    } catch (error) {
+                        tempObj["ability"]["Ability"] = stat.children[1].innerText
+                    }
                     break;
                     
-                    default:
-                        tempObj[stat.children[0].innerHTML] = stat.children[1].innerHTML // key = value
+                default:
+                    tempObj[stat.children[0].innerHTML] = stat.children[1].innerHTML // key = value
                     break;
             }
         }
