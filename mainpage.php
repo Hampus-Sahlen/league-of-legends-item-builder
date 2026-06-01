@@ -34,6 +34,43 @@ if (!empty($_SESSION["UUID"])) {
     )[0];
 }
 
+$itemArray = [];
+while ($item = $items -> fetch_assoc()) {
+    foreach ($item as $stat => $val){ // remove stats that are not set or are 0
+        if (empty($val)){
+            unset($item[$stat]);
+        }
+    }
+
+    $item["groups"] = [];
+    if (!empty($groups[$item["ID"]])) { // add on groups
+        foreach ($groups[$item["ID"]] as $group) {
+            $item["groups"][] = $group;
+        }
+    }
+
+    if (!empty($item["ability"])) {
+        $abilityClump = $item["ability"];
+        $item["ability"] = [];
+        if (str_contains($abilityClump, 'Unique – ') && str_contains($abilityClump, ': ')) {
+            foreach (explode('Unique – ', $abilityClump) as $ability) {
+                if (!empty($ability)){
+                    $temp = explode(': ', $ability);
+                    $item["ability"][$temp[0]] = $temp[1];
+                }
+            }
+        } else {
+            $item["ability"]["Ability"] = $abilityClump;
+        }
+
+    } else {
+        $item["ability"] = [];
+    }
+
+    $itemArray[] = $item;
+}
+
+// debugPrint($itemArray)
 
 
 
@@ -48,6 +85,9 @@ if (!empty($_SESSION["UUID"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>League Item Builder</title>
     <link rel="stylesheet" href="style/mainpage.css">
+    <script>
+        const items = <?php echo json_encode($itemArray, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) /* imports all items as a json */ ?>;
+    </script>
     <script src="script/item_builder.js" defer></script>
     <noscript>
         <code style="background-color: red;">
@@ -94,28 +134,5 @@ if (!empty($_SESSION["UUID"])) {
             <div id="hoverAbility" class="stats-list"></div>
         </div>
     </main>
-    
-    
-    <code id="importDiv" style="display: none;">
-    <?php while ($item = $items -> fetch_assoc()): ?>
-        <div>
-        <?php foreach ($item as $key => $val): if ($val !== null): ?>
-            <div>
-                <p><?php echo es($key); ?></p>
-                <p><?php echo es($val); ?></p>
-            </div>
-        <?php endif; endforeach; ?>
-        <?php if (!empty($groups[$item["ID"]])): ?>
-            <div>
-                <p>__groups__</p>
-                <?php foreach ($groups[$item["ID"]] as $group): ?>
-                <p><?php echo es($group) ?></p>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-        </div>
-    <?php endwhile ?>
-    </code>
-
 </body>
 </html>
